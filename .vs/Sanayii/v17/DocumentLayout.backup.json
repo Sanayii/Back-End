@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,19 +50,6 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SanayiiContext.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Data\\SanayiiContext.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
-              "RelativeToolTip": "Sanayii\\Data\\SanayiiContext.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAAAEkAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:29:25.649Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
               "Title": "UserPhones.cs",
               "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\UserPhones.cs",
@@ -71,8 +58,7 @@
               "RelativeToolTip": "Sanayii\\Entities\\UserPhones.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:28:25.439Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-24T22:28:25.439Z"
             },
             {
               "$type": "Document",
@@ -84,8 +70,7 @@
               "RelativeToolTip": "Sanayii\\Entities\\Violation.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:28:23.644Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-24T22:28:23.644Z"
             },
             {
               "$type": "Document",
@@ -97,8 +82,7 @@
               "RelativeToolTip": "Sanayii\\Entities\\AppUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:22:58.649Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-24T22:22:58.649Z"
             },
             {
               "$type": "Document",
@@ -110,8 +94,7 @@
               "RelativeToolTip": "Sanayii\\Program.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAAsAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:10:29.548Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-24T22:10:29.548Z"
             },
             {
               "$type": "Document",
@@ -119,12 +102,24 @@
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Sanayii\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Sanayii\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAdAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs*",
+              "RelativeToolTip": "Sanayii\\Controllers\\AccountController.cs*",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAYwKYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-24T21:21:17.652Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SanayiiContext.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Data\\SanayiiContext.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
+              "RelativeToolTip": "Sanayii\\Data\\SanayiiContext.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAAAEkAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T22:29:25.649Z"
             }
           ]
         }

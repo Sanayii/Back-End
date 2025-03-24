@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sanayii.Controllers.ViewModel;
 using Sanayii.Core.Entities;
 using Sanayii.Services;
+using System;
 using System.Linq;
 using System.Net;
 using System.Text.Encodings.Web;
@@ -28,7 +29,6 @@ namespace Sanayii.Controllers
             this.emailSender = emailSender;
         }
 
-        // 🔹 User Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
@@ -46,7 +46,6 @@ namespace Sanayii.Controllers
             return BadRequest(new { message = "Invalid username or password." });
         }
 
-        // 🔹 User Registration
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
@@ -76,7 +75,6 @@ namespace Sanayii.Controllers
             return Ok(new { message = "Registration successful. Please confirm your email." });
         }
 
-        // 🔹 Confirm Email (Fixes Encoding Issue)
         [HttpGet("ConfirmEmail")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
@@ -88,50 +86,61 @@ namespace Sanayii.Controllers
             if (user == null)
                 return NotFound(new { message = "User not found." });
 
-            token = WebUtility.UrlDecode(token); // Decode before validating
-
-            var result = await userManager.ConfirmEmailAsync(user, token);
-            if (result.Succeeded)
-                return Ok(new { message = "Email confirmed successfully." });
-
-            return BadRequest(new
+            try
             {
-                message = "Email confirmation failed. The link may have expired or is invalid.",
-                action = "Please request a new confirmation email."
-            });
+                // Decode the Base64 token
+                var decodedBytes = Convert.FromBase64String(WebUtility.UrlDecode(token));
+                var decodedToken = System.Text.Encoding.UTF8.GetString(decodedBytes);
+
+                var result = await userManager.ConfirmEmailAsync(user, decodedToken);
+                if (result.Succeeded)
+                    return Ok(new { message = "Email confirmed successfully." });
+
+                return BadRequest(new
+                {
+                    message = "Email confirmation failed. The link may have expired or is invalid.",
+                    action = "Please request a new confirmation email.",
+                    resendUrl = $"{Request.Scheme}://{Request.Host}/api/Account/ResendConfirmationEmail?email={user.Email}"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while confirming your email.", error = ex.Message });
+            }
         }
 
-        // 🔹 Send Confirmation Email
         private async Task SendConfirmationEmail(AppUser user)
         {
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var encodedToken = WebUtility.UrlEncode(token);
+
+            // Proper Encoding (Convert to Base64)
+            var tokenBytes = System.Text.Encoding.UTF8.GetBytes(token);
+            var encodedToken = WebUtility.UrlEncode(Convert.ToBase64String(tokenBytes));
 
             var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Account/ConfirmEmail?userId={user.Id}&token={encodedToken}";
 
             var subject = "Confirm Your Email - Sanayii";
             var messageBody = $@"
-                <div style=""font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#333;"">
-                    <p>Hi {user.FName} {user.LName},</p>
-                    <p>Thank you for registering with <strong>Sanayii</strong>. Please confirm your email by clicking the button below:</p>
-                    <p>
-                        <a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" 
-                           style=""background-color:#007bff;color:#fff;padding:10px 20px;text-decoration:none;
-                                  font-weight:bold;border-radius:5px;display:inline-block;"">
-                            Confirm Email
-                        </a>
-                    </p>
-                    <p>If the button doesn’t work, copy and paste this URL into your browser:</p>
-                    <p><a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" style=""color:#007bff;text-decoration:none;"">{HtmlEncoder.Default.Encode(confirmationLink)}</a></p>
-                    <p>If you did not sign up for this account, please ignore this email.</p>
-                    <p>Best Regards,<br />The Sanayii Team</p>
-                </div>
-            ";
+                    <div style=""font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#333;"">
+                        <p>Hi {user.FName} {user.LName},</p>
+                        <p>Thank you for registering with <strong>Sanayii</strong>. Please confirm your email by clicking the button below:</p>
+                        <p>
+                            <a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" 
+                               style=""background-color:#007bff;color:#fff;padding:10px 20px;text-decoration:none;
+                                      font-weight:bold;border-radius:5px;display:inline-block;"">
+                                Confirm Email
+                            </a>
+                        </p>
+                        <p>If the button doesn’t work, copy and paste this URL into your browser:</p>
+                        <p><a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" style=""color:#007bff;text-decoration:none;"">{HtmlEncoder.Default.Encode(confirmationLink)}</a></p>
+                        <p>If you did not sign up for this account, please ignore this email.</p>
+                        <p>Best Regards,<br />The Sanayii Team</p>
+                    </div>
+                ";
 
             await emailSender.SendEmailAsync(user.Email, subject, messageBody, true);
         }
 
-        // 🔹 Resend Confirmation Email
         [HttpPost("ResendConfirmationEmail")]
         [AllowAnonymous]
         public async Task<IActionResult> ResendConfirmationEmail(string email)
