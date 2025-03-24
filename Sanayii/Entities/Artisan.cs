@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Snai3y.Core.Entities
+namespace Sanayii.Core.Entities
 {
     public class Artisan:AppUser
     {
