@@ -392,3 +392,4 @@ C:\Users\asus\source\repos\Sanayii\Sanayii\obj\Debug\net9.0\compressed\pxdv5g4b7
 C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\asus\source\repos\Sanayii\Sanayii\obj\Debug\net9.0\Sanayii.sourcelink.json

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Snai3y.Core.Entities;
+using Sanayii.Core.Entities;
+using Sanayii.Core.Entities;
+using Sanayii.Services;
 using Snai3y.Repository.Data;
 
 namespace Sanayii
@@ -24,6 +26,13 @@ namespace Sanayii
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             
             builder.Services.AddScoped<SignInManager<AppUser>>();
+            builder.Services.AddTransient<EmailSenderService>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
 
             // Identity Configuration
             builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
@@ -36,7 +45,8 @@ namespace Sanayii
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             })
-            .AddEntityFrameworkStores<SanayiiContext>();
+            .AddEntityFrameworkStores<SanayiiContext>()
+            .AddDefaultTokenProviders();
 
             builder.Services.AddAuthentication();
 

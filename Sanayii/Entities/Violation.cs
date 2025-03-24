@@ -18,7 +18,5 @@ namespace Sanayii.Core.Entities
         public Contract Contract { get; set; }
         public int ContractId { get; set; }
 
-
-
     }
 }

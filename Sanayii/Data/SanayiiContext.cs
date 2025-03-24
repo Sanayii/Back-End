@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Snai3y.Core.Entities;
+using Sanayii.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +43,6 @@ namespace Snai3y.Repository.Data
 
             // Configure Identity Table Names (optional)
             modelBuilder.Entity<AppUser>().ToTable("Users");
-            modelBuilder.Entity<IdentityRole<string>>().ToTable("Roles");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");

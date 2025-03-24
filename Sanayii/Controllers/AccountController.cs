@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sanayii.Controllers.ViewModel;
-using Snai3y.Core.Entities;
+using Sanayii.Core.Entities;
+using Sanayii.Services;
 using System.Linq;
+using System.Net;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace Sanayii.Controllers
@@ -14,56 +18,40 @@ namespace Sanayii.Controllers
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly EmailSenderService emailSender;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, EmailSenderService emailSender)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
+            this.emailSender = emailSender;
         }
 
+        // 🔹 User Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            AppUser user = await userManager.FindByNameAsync(model.Username);
+            var user = await userManager.FindByNameAsync(model.Username);
             if (user == null)
-            {
-                return BadRequest("User not found!");
-            }
+                return BadRequest(new { message = "Invalid username or password." });
 
             var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
-            {
-                return Ok("Login Successfully");
-            }
-            else
-            {
-                return BadRequest("Invalid username or password");
-            }
+                return Ok(new { message = "Login successful." });
+
+            return BadRequest(new { message = "Invalid username or password." });
         }
 
+        // 🔹 User Registration
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            var role1 = new IdentityRole() { Name = "Customer" };
-            var role2 = new IdentityRole() { Name = "Admin" };
-            var role3 = new IdentityRole() { Name = "Artisan" };
-
-            await roleManager.CreateAsync(role1);
-            await roleManager.CreateAsync(role2);
-            await roleManager.CreateAsync(role3);
-
-
-
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var user = new AppUser
             {
@@ -76,23 +64,93 @@ namespace Sanayii.Controllers
                 Governate = model.Government
             };
 
-            var res = await userManager.CreateAsync(user, model.Password);
-            if (res.Succeeded)
+            var result = await userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors.Select(e => e.Description));
+
+            await userManager.AddToRoleAsync(user, "Customer");
+
+            await SendConfirmationEmail(user);
+            await signInManager.SignInAsync(user, false);
+
+            return Ok(new { message = "Registration successful. Please confirm your email." });
+        }
+
+        // 🔹 Confirm Email (Fixes Encoding Issue)
+        [HttpGet("ConfirmEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+                return BadRequest(new { message = "Invalid confirmation link." });
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            token = WebUtility.UrlDecode(token); // Decode before validating
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+                return Ok(new { message = "Email confirmed successfully." });
+
+            return BadRequest(new
             {
-                var resRole = await userManager.AddToRoleAsync(user, "Customer");
-                if (resRole.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, false);
-                    return Ok("Registered Successfully");
-                }
-                else
-                {
-                    return BadRequest("Failed to assign role");
-                }
+                message = "Email confirmation failed. The link may have expired or is invalid.",
+                action = "Please request a new confirmation email."
+            });
+        }
+
+        // 🔹 Send Confirmation Email
+        private async Task SendConfirmationEmail(AppUser user)
+        {
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedToken = WebUtility.UrlEncode(token);
+
+            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Account/ConfirmEmail?userId={user.Id}&token={encodedToken}";
+
+            var subject = "Confirm Your Email - Sanayii";
+            var messageBody = $@"
+                <div style=""font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#333;"">
+                    <p>Hi {user.FName} {user.LName},</p>
+                    <p>Thank you for registering with <strong>Sanayii</strong>. Please confirm your email by clicking the button below:</p>
+                    <p>
+                        <a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" 
+                           style=""background-color:#007bff;color:#fff;padding:10px 20px;text-decoration:none;
+                                  font-weight:bold;border-radius:5px;display:inline-block;"">
+                            Confirm Email
+                        </a>
+                    </p>
+                    <p>If the button doesn’t work, copy and paste this URL into your browser:</p>
+                    <p><a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" style=""color:#007bff;text-decoration:none;"">{HtmlEncoder.Default.Encode(confirmationLink)}</a></p>
+                    <p>If you did not sign up for this account, please ignore this email.</p>
+                    <p>Best Regards,<br />The Sanayii Team</p>
+                </div>
+            ";
+
+            await emailSender.SendEmailAsync(user.Email, subject, messageBody, true);
+        }
+
+        // 🔹 Resend Confirmation Email
+        [HttpPost("ResendConfirmationEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResendConfirmationEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return BadRequest(new { message = "Please provide a valid email address." });
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null || await userManager.IsEmailConfirmedAsync(user))
+                return Ok(new { message = "If an account with this email exists, a confirmation email has been sent." });
+
+            try
+            {
+                await SendConfirmationEmail(user);
+                return Ok(new { message = "A new confirmation email has been sent." });
             }
-            else
+            catch
             {
-                return BadRequest(res.Errors.Select(e => e.Description));
+                return StatusCode(500, new { message = "An error occurred while sending the confirmation email. Please try again later." });
             }
         }
     }
