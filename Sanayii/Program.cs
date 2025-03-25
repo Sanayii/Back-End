@@ -27,6 +27,7 @@ namespace Sanayii
 
             builder.Services.AddScoped<SignInManager<AppUser>>();
             builder.Services.AddTransient<EmailSenderService>();
+            builder.Services.AddTransient<SMSSender>();
 
             builder.Services.AddCors(options =>
             {

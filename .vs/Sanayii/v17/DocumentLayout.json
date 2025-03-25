@@ -3,16 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\asus\\source\\repos\\Sanayii\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\services\\smssender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\services\\smssender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\services\\emailsenderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\services\\emailsenderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\controllers\\viewmodel\\resetpasswordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\controllers\\viewmodel\\resetpasswordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\viewmodel\\verifyphonenumberviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\viewmodel\\verifyphonenumberviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\viewmodel\\confirmphonenumberviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\viewmodel\\confirmphonenumberviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\entities\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\entities\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\viewmodel\\resetpasswordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\viewmodel\\resetpasswordviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\data\\sanayiicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\entities\\violation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\entities\\violation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\entities\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\entities\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -49,45 +65,56 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmailSenderService.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Services\\EmailSenderService.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Services\\EmailSenderService.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Services\\EmailSenderService.cs",
+              "RelativeToolTip": "Sanayii\\Services\\EmailSenderService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T14:40:16.719Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ResetPasswordViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\ViewModel\\ResetPasswordViewModel.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Controllers\\ViewModel\\ResetPasswordViewModel.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\ViewModel\\ResetPasswordViewModel.cs",
-              "RelativeToolTip": "Sanayii\\Controllers\\ViewModel\\ResetPasswordViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAsAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "SMSSender.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Services\\SMSSender.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Services\\SMSSender.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Services\\SMSSender.cs",
+              "RelativeToolTip": "Sanayii\\Services\\SMSSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T00:16:36.912Z",
+              "WhenOpened": "2025-03-25T14:38:48.6Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "UserPhones.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\UserPhones.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Entities\\UserPhones.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\UserPhones.cs",
-              "RelativeToolTip": "Sanayii\\Entities\\UserPhones.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "VerifyPhoneNumberViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\ViewModel\\VerifyPhoneNumberViewModel.cs",
+              "RelativeDocumentMoniker": "Sanayii\\ViewModel\\VerifyPhoneNumberViewModel.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\ViewModel\\VerifyPhoneNumberViewModel.cs",
+              "RelativeToolTip": "Sanayii\\ViewModel\\VerifyPhoneNumberViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:28:25.439Z"
+              "WhenOpened": "2025-03-25T14:13:40.346Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "Violation.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\Violation.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Entities\\Violation.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\Violation.cs",
-              "RelativeToolTip": "Sanayii\\Entities\\Violation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "ConfirmPhoneNumberViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\ViewModel\\ConfirmPhoneNumberViewModel.cs",
+              "RelativeDocumentMoniker": "Sanayii\\ViewModel\\ConfirmPhoneNumberViewModel.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\ViewModel\\ConfirmPhoneNumberViewModel.cs",
+              "RelativeToolTip": "Sanayii\\ViewModel\\ConfirmPhoneNumberViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:28:23.644Z"
+              "WhenOpened": "2025-03-25T14:13:30.195Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -99,37 +126,75 @@
               "RelativeToolTip": "Sanayii\\Entities\\AppUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:22:58.649Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Program.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Program.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Program.cs",
-              "RelativeToolTip": "Sanayii\\Program.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAYwFIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T22:10:29.548Z",
+              "WhenOpened": "2025-03-24T22:22:58.649Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Sanayii\\Controllers\\AccountController.cs",
               "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs",
               "RelativeToolTip": "Sanayii\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAN8AAAAAAAAAAAAAAOwAAABXAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-24T21:21:17.652Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Violation.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\Violation.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Entities\\Violation.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\Violation.cs",
+              "RelativeToolTip": "Sanayii\\Entities\\Violation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T22:28:23.644Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UserPhones.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\UserPhones.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Entities\\UserPhones.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\UserPhones.cs",
+              "RelativeToolTip": "Sanayii\\Entities\\UserPhones.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T22:28:25.439Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Program.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Program.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Program.cs",
+              "RelativeToolTip": "Sanayii\\Program.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAB0AAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T22:10:29.548Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ResetPasswordViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\ViewModel\\ResetPasswordViewModel.cs",
+              "RelativeDocumentMoniker": "Sanayii\\ViewModel\\ResetPasswordViewModel.cs",
+              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\ViewModel\\ResetPasswordViewModel.cs",
+              "RelativeToolTip": "Sanayii\\ViewModel\\ResetPasswordViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T00:16:36.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "SanayiiContext.cs",
               "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
               "RelativeDocumentMoniker": "Sanayii\\Data\\SanayiiContext.cs",

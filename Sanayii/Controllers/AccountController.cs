@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Sanayii.Controllers.ViewModel;
 using Sanayii.Core.Entities;
 using Sanayii.Services;
+using Sanayii.ViewModel;
 using System;
 using System.Linq;
 using System.Net;
@@ -18,14 +18,14 @@ namespace Sanayii.Controllers
     {
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly EmailSenderService emailSender;
+        private readonly SMSSender smsSender;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, EmailSenderService emailSender)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, SMSSender smsSender, EmailSenderService emailSender)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.roleManager = roleManager;
+            this.smsSender = smsSender;
             this.emailSender = emailSender;
         }
 
@@ -243,6 +243,109 @@ namespace Sanayii.Controllers
             }
 
             return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
+        }
+        [Authorize]
+        [HttpPost]
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SendPhoneVerificationCode(ConfirmPhoneNumberViewModel model)
+        {
+            if (ModelState.IsValid && !string.IsNullOrEmpty(model.PhoneNumber))
+            {
+                var user = await userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found. Please log in again." });
+                }
+
+                var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
+
+                var result = await smsSender.SendSmsAsync(model.PhoneNumber,
+                    $"Your verification code is: {token}. Please enter this code to confirm your phone number.");
+
+                if (result)
+                {
+                    return Ok(new { message = "A verification code has been sent to your phone number. Please enter the code to complete verification." });
+                }
+                else
+                {
+                    return BadRequest(new { message = "We encountered an issue while sending the verification code. Please try again later." });
+                }
+            }
+            return BadRequest(new { message = "There were errors in your submission. Please correct them and try again." });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ResendPhoneVerificationCode()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found. Please log in again." });
+            }
+
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+            {
+                return BadRequest(new { message = "Your phone number is not set. Please update your phone number to continue." });
+            }
+
+            var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
+            try
+            {
+                var result = await smsSender.SendSmsAsync(user.PhoneNumber,
+                    $"Your new verification code is: {token}. Please enter this code to verify your phone number.");
+
+                if (result)
+                {
+                    return Ok(new { message = "A new verification code has been sent to your phone. Please enter the code below to confirm your phone number." });
+                }
+                else
+                {
+                    return BadRequest(new { message = "We were unable to resend the verification code. Please try again later." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while sending the verification code. Please try again later." });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Invalid data submitted.", errors = ModelState });
+            }
+
+            var user = await userManager.GetUserAsync(User);
+            if (user == null || string.IsNullOrEmpty(user.PhoneNumber))
+            {
+                return NotFound(new { message = "User not found. Please log in again." });
+            }
+
+            var isTokenValid = await userManager.VerifyChangePhoneNumberTokenAsync(user, model.Token, user.PhoneNumber);
+
+            if (isTokenValid)
+            {
+                user.PhoneNumberConfirmed = true;
+                var updateResult = await userManager.UpdateAsync(user);
+
+                if (updateResult.Succeeded)
+                {
+                    return Ok(new { message = "Your phone number has been successfully verified." });
+                }
+                else
+                {
+                    return BadRequest(new { message = "An error occurred while confirming your phone number. Please try again." });
+                }
+            }
+            else
+            {
+                return BadRequest(new { message = "The token has expired or is invalid. Please request a new verification code." });
+            }
         }
     }
 }

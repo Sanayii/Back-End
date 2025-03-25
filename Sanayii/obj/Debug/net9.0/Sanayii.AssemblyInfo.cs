@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sanayii")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+370b12c88ba8b1a9dd669d6d5314aa210e7b2738")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6508606d80c620ba25f83bb6a7bb64371eae84f4")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sanayii")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sanayii")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
