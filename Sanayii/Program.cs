@@ -24,7 +24,7 @@ namespace Sanayii
             // Database Connection
             builder.Services.AddDbContext<SanayiiContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            
+
             builder.Services.AddScoped<SignInManager<AppUser>>();
             builder.Services.AddTransient<EmailSenderService>();
 
@@ -44,9 +44,15 @@ namespace Sanayii
                 options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<SanayiiContext>()
             .AddDefaultTokenProviders();
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromMinutes(30);
+            });
 
             builder.Services.AddAuthentication();
 

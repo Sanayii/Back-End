@@ -149,8 +149,14 @@ namespace Sanayii.Controllers
                 return BadRequest(new { message = "Please provide a valid email address." });
 
             var user = await userManager.FindByEmailAsync(email);
-            if (user == null || await userManager.IsEmailConfirmedAsync(user))
-                return Ok(new { message = "If an account with this email exists, a confirmation email has been sent." });
+          
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+            var res = await userManager.IsEmailConfirmedAsync(user);
+            if (res)
+            {
+                return Ok(new { message = "This Email is Already confirmed!" });
+            }
 
             try
             {
@@ -161,6 +167,82 @@ namespace Sanayii.Controllers
             {
                 return StatusCode(500, new { message = "An error occurred while sending the confirmation email. Please try again later." });
             }
+        }
+        private async Task SendForgotPasswordEmail(string email, AppUser user)
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebUtility.UrlEncode(token); 
+
+            var passwordResetLink = Url.Action("ResetPassword", "Account",
+                new { Email = email, Token = encodedToken }, protocol: HttpContext.Request.Scheme);
+
+            var safeLink = HtmlEncoder.Default.Encode(passwordResetLink);
+
+            var subject = "Reset Your Password";
+
+            var messageBody = $@"
+                <div style=""font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #333; line-height: 1.5; padding: 20px;"">
+                    <h2 style=""color: #007bff; text-align: center;"">Password Reset Request</h2>
+                    <p>Hi {user.FName} {user.LName},</p>
+
+                    <p>We received a request to reset your password for your <strong>Sanayii</strong> account. Click the button below to reset your password:</p>
+
+                    <div style=""text-align: center; margin: 20px 0;"">
+                        <a href=""{safeLink}"" 
+                           style=""background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block;"">
+                            Reset Password
+                        </a>
+                    </div>
+
+                    <p>If the button above doesn’t work, copy and paste this URL into your browser:</p>
+                    <p style=""background-color: #f8f9fa; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"">
+                        <a href=""{safeLink}"" style=""color: #007bff; text-decoration: none;"">{safeLink}</a>
+                    </p>
+
+                    <p>If you did not request this reset, please ignore this email.</p>
+
+                    <p>Thank you,<br />The Sanayii Team</p>
+                </div>";
+
+            await emailSender.SendEmailAsync(email, subject, messageBody, IsBodyHtml: true);
+        }
+
+        [HttpPost("ForgotPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                await SendForgotPasswordEmail(user.Email, user);
+                return Ok(new { message = "Email sent successfully." });
+            }
+            return NotFound(new { message = "User not found." });
+        }
+
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            var decodedToken = WebUtility.UrlDecode(WebUtility.UrlDecode(model.Token));
+
+            var result = await userManager.ResetPasswordAsync(user, decodedToken, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new { message = "Password reset successfully." });
+            }
+
+            return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
         }
     }
 }
