@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "Sanayii.Controllers.AccountController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/Account/ChangePassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "Sanayii.ViewModel.ChangePasswordViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sanayii.Controllers.AccountController",
     "Method": "ConfirmEmail",
     "RelativePath": "api/Account/ConfirmEmail",
     "HttpMethod": "GET",
@@ -46,7 +62,7 @@
     "Parameters": [
       {
         "Name": "model",
-        "Type": "Sanayii.Controllers.ViewModel.LoginViewModel",
+        "Type": "Sanayii.ViewModel.LoginViewModel",
         "IsRequired": true
       }
     ],
@@ -62,7 +78,7 @@
     "Parameters": [
       {
         "Name": "model",
-        "Type": "Sanayii.Controllers.ViewModel.RegisterViewModel",
+        "Type": "Sanayii.ViewModel.RegisterViewModel",
         "IsRequired": true
       }
     ],
@@ -86,6 +102,16 @@
   },
   {
     "ContainingType": "Sanayii.Controllers.AccountController",
+    "Method": "ResendPhoneVerificationCode",
+    "RelativePath": "api/Account/ResendPhoneVerificationCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sanayii.Controllers.AccountController",
     "Method": "ResetPassword",
     "RelativePath": "api/Account/ResetPassword",
     "HttpMethod": "POST",
@@ -94,7 +120,39 @@
     "Parameters": [
       {
         "Name": "model",
-        "Type": "Sanayii.Controllers.ViewModel.ResetPasswordViewModel",
+        "Type": "Sanayii.ViewModel.ResetPasswordViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sanayii.Controllers.AccountController",
+    "Method": "SendPhoneVerificationCode",
+    "RelativePath": "api/Account/SendPhoneVerificationCode",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "Sanayii.ViewModel.ConfirmPhoneNumberViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Sanayii.Controllers.AccountController",
+    "Method": "VerifyPhoneNumber",
+    "RelativePath": "api/Account/VerifyPhoneNumber",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "Sanayii.ViewModel.VerifyPhoneNumberViewModel",
         "IsRequired": true
       }
     ],

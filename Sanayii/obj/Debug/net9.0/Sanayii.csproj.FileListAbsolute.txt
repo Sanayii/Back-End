@@ -393,3 +393,5 @@ C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Swashbuckle.AspNetCo
 C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\asus\source\repos\Sanayii\Sanayii\obj\Debug\net9.0\Sanayii.sourcelink.json
+C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\Twilio.dll
+C:\Users\asus\source\repos\Sanayii\Sanayii\bin\Debug\net9.0\UAParser.dll

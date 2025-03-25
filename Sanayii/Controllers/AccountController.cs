@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Sanayii.Core.Entities;
 using Sanayii.Services;
@@ -8,7 +9,9 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading.Tasks;
+using UAParser;
 
 namespace Sanayii.Controllers
 {
@@ -149,7 +152,7 @@ namespace Sanayii.Controllers
                 return BadRequest(new { message = "Please provide a valid email address." });
 
             var user = await userManager.FindByEmailAsync(email);
-          
+
             if (user == null)
                 return NotFound(new { message = "User not found." });
             var res = await userManager.IsEmailConfirmedAsync(user);
@@ -171,7 +174,7 @@ namespace Sanayii.Controllers
         private async Task SendForgotPasswordEmail(string email, AppUser user)
         {
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
-            var encodedToken = WebUtility.UrlEncode(token); 
+            var encodedToken = WebUtility.UrlEncode(token);
 
             var passwordResetLink = Url.Action("ResetPassword", "Account",
                 new { Email = email, Token = encodedToken }, protocol: HttpContext.Request.Scheme);
@@ -245,9 +248,7 @@ namespace Sanayii.Controllers
             return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
         }
         [Authorize]
-        [HttpPost]
-        [Authorize]
-        [HttpPost]
+        [HttpPost("SendPhoneVerificationCode")]
         public async Task<IActionResult> SendPhoneVerificationCode(ConfirmPhoneNumberViewModel model)
         {
             if (ModelState.IsValid && !string.IsNullOrEmpty(model.PhoneNumber))
@@ -276,7 +277,7 @@ namespace Sanayii.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("ResendPhoneVerificationCode")]
         public async Task<IActionResult> ResendPhoneVerificationCode()
         {
             var user = await userManager.GetUserAsync(User);
@@ -312,7 +313,7 @@ namespace Sanayii.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("VerifyPhoneNumber")]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
             if (!ModelState.IsValid)
@@ -345,6 +346,88 @@ namespace Sanayii.Controllers
             else
             {
                 return BadRequest(new { message = "The token has expired or is invalid. Please request a new verification code." });
+            }
+        }
+
+        private async Task SendPasswordChangedNotificationEmail(string email, AppUser user, string device)
+        {
+            var subject = "Your Password Has Been Changed";
+
+            var messageBody = $@"
+        <div style=""font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #333; line-height: 1.5; padding: 20px;"">
+            <h2 style=""color: #007bff; text-align: center;"">Password Change Notification</h2>
+            <p style=""margin-bottom: 20px;"">Hi {user.FName} {user.LName},</p>
+
+            <p>We wanted to let you know that your password for your <strong>Sanayii</strong> account was successfully changed.</p>
+
+            <div style=""margin: 20px 0; padding: 10px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 5px;"">
+                <p><strong>Date and Time:</strong> {DateTime.UtcNow:dddd, MMMM dd, yyyy HH:mm} UTC</p>
+                <p><strong>Device:</strong> {device}</p>
+            </div>
+
+            <p>If you did not make this change, please reset your password immediately or contact support for assistance:</p>
+
+            <p style=""margin-top: 30px;"">Thank you,<br />The Sanayii Team</p>
+        </div>
+        ";
+
+            await emailSender.SendEmailAsync(email, subject, messageBody, IsBodyHtml: true);
+        }
+
+        [Authorize]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Invalid data submitted.", errors = ModelState });
+            }
+
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found. Please log in again." });
+            }
+
+            var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                var device = GetDeviceInfo(HttpContext);
+
+                await SendPasswordChangedNotificationEmail(user.Email, user, device);
+
+                await signInManager.RefreshSignInAsync(user);
+
+                return Ok(new { message = "Password changed successfully. A confirmation email has been sent." });
+            }
+            else
+            {
+                return BadRequest(new { message = "An error occurred while changing your password. Please try again." });
+            }
+        }
+        private string GetDeviceInfo(HttpContext httpContext)
+        {
+            try
+            {
+                var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+
+                if (string.IsNullOrEmpty(userAgent))
+                {
+                    return "Unknown Device";
+                }
+
+                var parser = Parser.GetDefault();
+                var clientInfo = parser.Parse(userAgent);
+
+                var os = clientInfo.OS.ToString();
+                var browser = clientInfo.UA.ToString();
+
+                return $"{browser} on {os}";
+            }
+            catch (Exception ex)
+            {
+                return "Unknown Device";
             }
         }
     }

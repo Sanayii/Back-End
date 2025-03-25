@@ -87,6 +87,10 @@
             "Twilio": {
               "target": "Package",
               "version": "[7.9.1, )"
+            },
+            "UAParser": {
+              "target": "Package",
+              "version": "[3.1.47, )"
             }
           },
           "imports": [
