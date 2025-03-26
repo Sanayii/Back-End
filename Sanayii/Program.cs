@@ -1,9 +1,12 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Sanayii.Core.Entities;
 using Sanayii.Core.Entities;
 using Sanayii.Services;
 using Snai3y.Repository.Data;
+using System.Text;
 
 namespace Sanayii
 {
@@ -55,9 +58,46 @@ namespace Sanayii
                 options.TokenLifespan = TimeSpan.FromMinutes(30);
             });
 
-            builder.Services.AddAuthentication();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+       .AddJwtBearer(options =>
+       {
+           options.SaveToken = true;
+           options.RequireHttpsMetadata = true; // Ensure HTTPS for security
+           options.TokenValidationParameters = new TokenValidationParameters()
+           {
+               ValidateIssuer = true,
+               ValidIssuer = "http://localhost:5127/",
+               ValidateAudience = true, // Better security
+               ValidAudience = "http://localhost:5127/", // Define a valid audience
+               ValidateLifetime = true, // Ensure token expiration is checked
+               ValidateIssuerSigningKey = true, // Validate secret key
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%")) // Use environment config
+           };
+       })
+       .AddFacebook(options =>
+       {
+           options.AppId = "1786811492250782"; // Replace with your Facebook App ID
+           options.AppSecret = "b31e78cb811d0ca8f9252697c512ce27";
+           options.CallbackPath = "/signin-facebook";
+       });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins", policy =>
+                {
+                    policy.AllowAnyOrigin()  // ← السماح بأي مصدر (مؤقتًا للاختبار)
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
             var app = builder.Build();
+            app.UseCors("MyAllowSpecificOrigins");
+
 
             // Configure Middleware
             if (app.Environment.IsDevelopment())
