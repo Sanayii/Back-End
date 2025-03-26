@@ -11,6 +11,10 @@ namespace Sanayii.Core.Entities
     {
         [ForeignKey("AppUser")]
         public string Id { get; set; }
+
+        public string Name { get; set; }
         public decimal Salary { get; set; }
+        public ICollection<Contract> Contracts { get; set; }
+        
     }
 }

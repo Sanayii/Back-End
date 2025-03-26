@@ -13,16 +13,17 @@ namespace Sanayii.Core.Entities
         public int ExecutionTime { get; set; }
 
 
-        [ForeignKey("CustomerId")]
+       
         public Customer Customer { get; set; }
         public string CustomerId { get; set; }
 
-        [ForeignKey("PaymentId")]
+        
         public Payment Payment { get; set; }
         public int PaymentId { get; set; }
         
-        [ForeignKey("ServiceId")]
+       
         public Service Service { get; set; }
-        public int ServiceId { get; set; }
+        public int ServiceId { get; set; } 
+        
     }
 }

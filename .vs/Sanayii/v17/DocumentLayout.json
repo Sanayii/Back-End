@@ -1,50 +1,30 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\asus\\source\\repos\\Sanayii\\",
+  "WorkspaceRootPath": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326173139_AddTriggers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Sanayii\\Migrations\\20250326173139_AddTriggers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326172451_AddStoredProcedures.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Sanayii\\Migrations\\20250326172451_AddStoredProcedures.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\controllers\\viewmodel\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\controllers\\viewmodel\\registerviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\controllers\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\controllers\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\entities\\artisan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\entities\\artisan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Migrations\\20250324123215_Init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Sanayii\\Migrations\\20250324123215_Init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\pages\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\data\\sanayiicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\microteck\\onedrive\\desktop\\project\\sanayii\\data\\sanayiicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\data\\sanayiicontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\asus\\source\\repos\\sanayii\\sanayii\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\microteck\\onedrive\\desktop\\project\\sanayii\\migrations\\20250326172230_test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\migrations\\20250326172230_test.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\microteck\\onedrive\\desktop\\project\\sanayii\\migrations\\sanayiicontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\migrations\\sanayiicontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|c:\\users\\microteck\\onedrive\\desktop\\project\\sanayii\\migrations\\20250324123215_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CCCA8B2E-D5EC-4061-9527-D5727BAB0D98}|Sanayii\\Sanayii.csproj|solutionrelative:sanayii\\migrations\\20250324123215_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,8 +34,55 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20250326173139_AddTriggers.cs",
+              "DocumentMoniker": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326173139_AddTriggers.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Migrations\\20250326173139_AddTriggers.cs",
+              "ToolTip": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326173139_AddTriggers.cs",
+              "RelativeToolTip": "Sanayii\\Migrations\\20250326173139_AddTriggers.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAAAJ8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T17:31:40.274Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20250326172451_AddStoredProcedures.cs",
+              "DocumentMoniker": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326172451_AddStoredProcedures.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Migrations\\20250326172451_AddStoredProcedures.cs",
+              "ToolTip": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326172451_AddStoredProcedures.cs",
+              "RelativeToolTip": "Sanayii\\Migrations\\20250326172451_AddStoredProcedures.cs",
+              "ViewState": "AgIAABcBAAAAAAAAAAAAAPUDAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T17:24:51.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "20250326172230_Test.cs",
+              "DocumentMoniker": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326172230_Test.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Migrations\\20250326172230_Test.cs",
+              "ToolTip": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250326172230_Test.cs",
+              "RelativeToolTip": "Sanayii\\Migrations\\20250326172230_Test.cs",
+              "ViewState": "AgIAAMsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T17:22:31.155Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
@@ -65,151 +92,53 @@
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SanayiiContext.cs",
+              "DocumentMoniker": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Data\\SanayiiContext.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Data\\SanayiiContext.cs",
+              "ToolTip": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Data\\SanayiiContext.cs",
+              "RelativeToolTip": "Sanayii\\Data\\SanayiiContext.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAAADQAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-26T17:17:57.094Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Artisan.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\Artisan.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Entities\\Artisan.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Entities\\Artisan.cs",
-              "RelativeToolTip": "Sanayii\\Entities\\Artisan.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAYAAAAAAAAAA==",
+              "Title": "SanayiiContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\SanayiiContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "Sanayii\\Migrations\\SanayiiContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\SanayiiContextModelSnapshot.cs",
+              "RelativeToolTip": "Sanayii\\Migrations\\SanayiiContextModelSnapshot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T12:36:38.561Z",
+              "WhenOpened": "2025-03-26T17:21:51.397Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "20250324123215_Init.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Migrations\\20250324123215_Init.cs",
+              "DocumentMoniker": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250324123215_Init.cs",
               "RelativeDocumentMoniker": "Sanayii\\Migrations\\20250324123215_Init.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Migrations\\20250324123215_Init.cs",
+              "ToolTip": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Migrations\\20250324123215_Init.cs",
               "RelativeToolTip": "Sanayii\\Migrations\\20250324123215_Init.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T12:32:16.069Z",
+              "WhenOpened": "2025-03-26T17:21:55.3Z",
               "EditorCaption": ""
-            },
+            }
+          ]
+        },
+        {
+          "DockedWidth": 1339,
+          "SelectedChildIndex": -1,
+          "Children": [
             {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LoginViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\ViewModel\\LoginViewModel.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Controllers\\ViewModel\\LoginViewModel.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\ViewModel\\LoginViewModel.cs",
-              "RelativeToolTip": "Sanayii\\Controllers\\ViewModel\\LoginViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T11:51:15.988Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RegisterViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\ViewModel\\RegisterViewModel.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Controllers\\ViewModel\\RegisterViewModel.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\ViewModel\\RegisterViewModel.cs",
-              "RelativeToolTip": "Sanayii\\Controllers\\ViewModel\\RegisterViewModel.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAqwC0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T11:48:11.653Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Sanayii\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T11:47:50.85Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "WeatherForecastController.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\WeatherForecastController.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Controllers\\WeatherForecastController.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Controllers\\WeatherForecastController.cs",
-              "RelativeToolTip": "Sanayii\\Controllers\\WeatherForecastController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T11:41:53.992Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "Sanayii\\Properties\\launchSettings.json",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Properties\\launchSettings.json",
-              "RelativeToolTip": "Sanayii\\Properties\\launchSettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-24T11:25:16.08Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Program.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Program.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Program.cs",
-              "RelativeToolTip": "Sanayii\\Program.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T11:18:51.066Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "SanayiiContext.cs",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
-              "RelativeDocumentMoniker": "Sanayii\\Data\\SanayiiContext.cs",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Data\\SanayiiContext.cs",
-              "RelativeToolTip": "Sanayii\\Data\\SanayiiContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T11:18:41.047Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "_ViewImports.cshtml",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Pages\\_ViewImports.cshtml",
-              "RelativeDocumentMoniker": "Sanayii\\Pages\\_ViewImports.cshtml",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Pages\\_ViewImports.cshtml",
-              "RelativeToolTip": "Sanayii\\Pages\\_ViewImports.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-24T11:14:37.832Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "_ViewStart.cshtml",
-              "DocumentMoniker": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Pages\\_ViewStart.cshtml",
-              "RelativeDocumentMoniker": "Sanayii\\Pages\\_ViewStart.cshtml",
-              "ToolTip": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Pages\\_ViewStart.cshtml",
-              "RelativeToolTip": "Sanayii\\Pages\\_ViewStart.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-24T11:14:35.875Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             }
           ]
         }

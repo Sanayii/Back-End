@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sanayii.Controllers.ViewModel;
-using Snai3y.Core.Entities;
+using Sanayii.Core.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -16,7 +16,7 @@ namespace Sanayii.Core.Entities
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
         public string CustomerId { get; set; }
-        
+
         [ForeignKey("ArtisanId")]
         public Artisan Artisan { get; set; }
         public string ArtisanId { get; set; }
@@ -24,5 +24,8 @@ namespace Sanayii.Core.Entities
         [ForeignKey("ServiceId")]
         public Service Service { get; set; }
         public int ServiceId { get; set; }
+
+
+
     }
 }

@@ -12,5 +12,9 @@ namespace Sanayii.Core.Entities
         [ForeignKey("AppUser")]
         public string Id { get; set; }
         public Discount Discount { get; set; }
+
+        public ICollection<ServiceRequestPayment> ServiceRequestPayments { get; set; }
+        public ICollection<Review> Reviews { get; set; }
+
     }
 }

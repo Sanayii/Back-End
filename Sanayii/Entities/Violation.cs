@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sanayii.Core.Entities
 {
@@ -14,11 +10,10 @@ namespace Sanayii.Core.Entities
         public string Status { get; set; }
         public DateTime Date { get; set; }
 
-        [ForeignKey("ContractId")]
-        public Contract Contract { get; set; }
+        // Foreign key reference to Contract
         public int ContractId { get; set; }
 
-
-
+        [ForeignKey(nameof(ContractId))]
+        public Contract Contract { get; set; }
     }
 }

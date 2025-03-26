@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Snai3y.Core.Entities;
+using Sanayii.Core.Entities;
 using Snai3y.Repository.Data;
 
 namespace Sanayii

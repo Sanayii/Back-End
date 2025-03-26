@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Sanayii.csproj": {}
+    "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Sanayii.csproj": {}
   },
   "projects": {
-    "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Sanayii.csproj": {
+    "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Sanayii.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Sanayii.csproj",
+        "projectUniqueName": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Sanayii.csproj",
         "projectName": "Sanayii",
-        "projectPath": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\Sanayii.csproj",
-        "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\asus\\source\\repos\\Sanayii\\Sanayii\\obj\\",
+        "projectPath": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\Sanayii.csproj",
+        "packagesPath": "C:\\Users\\MicroTeck\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MicroTeck\\OneDrive\\Desktop\\Project\\Sanayii\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MicroTeck\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -62,17 +62,25 @@
               "target": "Package",
               "version": "[9.0.3, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[9.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
+            "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[9.0.3, )"
             },

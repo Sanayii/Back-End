@@ -15,5 +15,10 @@ namespace Sanayii.Core.Entities
         public string City { get; set; }
         public string Street { get; set; }
         public string Governate { get; set; }
+
+        public Boolean IsDeleted { get; set; } = false  ;//default value is false
+
+        //navigation property as user can have many phone numbers.
+        public ICollection<UserPhones> UserPhones { get; set; } = new HashSet<UserPhones>();
     }
 }
