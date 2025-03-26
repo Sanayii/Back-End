@@ -18,6 +18,7 @@ namespace Snai3y.Repository.Data
         public SanayiiContext(DbContextOptions<SanayiiContext> options) : base(options)
         {
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -52,10 +53,7 @@ namespace Snai3y.Repository.Data
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
-            // ✅ Use Table-Per-Type (TPT) to create separate tables
-            modelBuilder.Entity<AppUser>().UseTptMappingStrategy();
-
-            // ✅ Ensure Artisan and Admin `Id` is also an FK to `AppUser`
+            // Ensure Artisan and Admin `Id` is also an FK to `AppUser`
             modelBuilder.Entity<Artisan>()
                 .ToTable("Artisans")
                 .HasOne<AppUser>()
@@ -71,10 +69,10 @@ namespace Snai3y.Repository.Data
             modelBuilder.Entity<Customer>()
                 .ToTable("Customer")
                 .HasOne<AppUser>()
-            .WithOne()
+                .WithOne()
                 .HasForeignKey<Customer>(c => c.Id);
 
-           //✅ Configure foreign key constraints for Reviews table
+            // Configure foreign key constraints for Reviews table
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Customer)
                 .WithMany(c => c.Reviews)
@@ -93,7 +91,7 @@ namespace Snai3y.Repository.Data
                 .HasForeignKey(r => r.ServiceId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //✅Configure Violations Table==
+            // Configure Violations Table
             modelBuilder.Entity<Violation>(entity =>
             {
                 entity.HasKey(v => v.Id);
@@ -107,7 +105,7 @@ namespace Snai3y.Repository.Data
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
-            //✅Audit Log Configuration
+            // Audit Log Configuration
             modelBuilder.Entity<AuditLog>(entity =>
             {
                 // Set Primary Key
@@ -147,6 +145,7 @@ namespace Snai3y.Repository.Data
                 entity.HasIndex(a => a.Timestamp);
             });
         }
+
         public DbSet<Artisan> Artisans { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }

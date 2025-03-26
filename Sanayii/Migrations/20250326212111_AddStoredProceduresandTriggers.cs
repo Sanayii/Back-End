@@ -1100,6 +1100,53 @@ namespace Sanayii.Migrations
                     END
                 END;
             ");
+            //✅Trigger For Updating Rating of Artisans
+            migrationBuilder.Sql(@"DROP TRIGGER IF EXISTS UpdateArtisanRating;");
+            migrationBuilder.Sql(@"
+              CREATE TRIGGER UpdateArtisanRating
+                    ON Reviews
+                    AFTER INSERT, UPDATE, DELETE
+                    AS
+                    BEGIN
+                        SET NOCOUNT ON;
+
+                        -- Update Artisan rating for affected artisans
+                        UPDATE Artisan
+                        SET Rating = (
+                            SELECT COALESCE(AVG(Rating), 0) FROM Reviews WHERE ArtisanId = Artisan.Id
+                        )
+                        WHERE Id IN (
+                            SELECT ArtisanId FROM inserted
+                            UNION
+                            SELECT ArtisanId FROM deleted
+                        );
+                    END;
+                    ");
+            //✅ TRIGGER FOR UPDATING PAYMENT STATUS
+            migrationBuilder.Sql(@"DROP TRIGGER IF EXISTS UpdatePaymentStatusOnFullPayment;");
+            migrationBuilder.Sql(@"
+              CREATE TRIGGER UpdatePaymentStatusOnFullPayment
+                ON Payments
+                AFTER INSERT, UPDATE
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+
+                    UPDATE Payments
+                    SET Status = 'Completed'
+                    WHERE Id IN (
+                        SELECT p.Id
+                        FROM Payments p
+                        JOIN ServiceRequestPayment srp ON p.Id = srp.PaymentId
+                        JOIN Services s ON srp.ServiceId = s.Id
+                        WHERE (
+                            SELECT SUM(Amount) 
+                            FROM Payments 
+                            WHERE Id = p.Id
+                        ) >= (s.BasePrice + s.AdditionalPrice)
+                    );
+                END;
+                ");
         }
 
         /// <inheritdoc />
@@ -1187,7 +1234,8 @@ namespace Sanayii.Migrations
             migrationBuilder.DropTable(name: "AuditLogs");
             migrationBuilder.Sql(@"DROP TRIGGER IF EXISTS trg_CheckViolations");
             migrationBuilder.Sql(@"DROP TRIGGER IF EXISTS trg_UpdateDiscount");
-
+            migrationBuilder.Sql(@"DROP TRIGGER IF EXISTS UpdateArtisanRating;");
+            migrationBuilder.Sql(@"DROP TRIGGER IF EXISTS UpdatePaymentStatusOnFullPayment");
         }
     }
 }
