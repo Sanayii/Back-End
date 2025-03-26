@@ -10,5 +10,8 @@ namespace Sanayii.Core.Entities
     {
         public string UserId { get; set; }
         public string PhoneNumber { get; set; }
+
+        // Navigation property:the relationship between User and UserPhones is one-to-many
+        public AppUser User { get; set; }
     }
 }

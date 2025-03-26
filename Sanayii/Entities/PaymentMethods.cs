@@ -10,5 +10,6 @@ namespace Sanayii.Core.Entities
     {
         public int PaymentId { get; set; }
         public string Method { get; set; }
+        public Payment Payment { get; set; } //Navigation property
     }
 }

@@ -18,5 +18,6 @@ namespace Sanayii.Core.Entities
         
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
     }
 }
