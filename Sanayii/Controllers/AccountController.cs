@@ -2,12 +2,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Sanayii.Core.Entities;
 using Sanayii.Services;
 using Sanayii.ViewModel;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -23,37 +27,88 @@ namespace Sanayii.Controllers
         private readonly SignInManager<AppUser> signInManager;
         private readonly EmailSenderService emailSender;
         private readonly SMSSender smsSender;
-
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, SMSSender smsSender, EmailSenderService emailSender)
+        private readonly RoleManager<IdentityRole> roleManager;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, SMSSender smsSender, EmailSenderService emailSender, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.smsSender = smsSender;
             this.emailSender = emailSender;
+            this.roleManager = roleManager;
         }
+
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var user = await userManager.FindByNameAsync(model.Username);
+            AppUser user = await userManager.FindByNameAsync(model.Username);
             if (user == null)
-                return BadRequest(new { message = "Invalid username or password." });
+            {
+                return BadRequest("User not found!");
+            }
 
+            List<Claim> UserClaims = new List<Claim>(); //ID,NAME,ROLE
+            // Token Generated id change (JWT predefined Claims JIT)
+            UserClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            UserClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+            UserClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
+
+            var UserRoles = await userManager.GetRolesAsync(user);
+            foreach (var item in UserRoles)
+            {
+                UserClaims.Add(new Claim(ClaimTypes.Role, item));
+            }
+            var SignInKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"));
+            SigningCredentials signingCred = new SigningCredentials(SignInKey, SecurityAlgorithms.HmacSha256);
             var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
-                return Ok(new { message = "Login successful." });
+            {
+                //design token
+                JwtSecurityToken token = new JwtSecurityToken(
+                    issuer: "http://localhost:5127/",
+                    audience: "http://localhost:4200/",
+                    expires: DateTime.Now.AddHours(1),
+                    claims: UserClaims,
+                    signingCredentials: signingCred
+                    );
+                // generate token response
 
-            return BadRequest(new { message = "Invalid username or password." });
+                return Ok("Login Successfully" +
+                    new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    });
+            }
+            else
+            {
+                return BadRequest("Invalid username or password");
+            }
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
+            var role1 = new IdentityRole() { Name = "Customer" };
+            var role2 = new IdentityRole() { Name = "Admin" };
+            var role3 = new IdentityRole() { Name = "Artisan" };
+
+            await roleManager.CreateAsync(role1);
+            await roleManager.CreateAsync(role2);
+            await roleManager.CreateAsync(role3);
+
+
+
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var user = new AppUser
             {
@@ -66,18 +121,89 @@ namespace Sanayii.Controllers
                 Governate = model.Government
             };
 
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return BadRequest(result.Errors.Select(e => e.Description));
-
-            await userManager.AddToRoleAsync(user, "Customer");
-
-            await SendConfirmationEmail(user);
-            await signInManager.SignInAsync(user, false);
-
-            return Ok(new { message = "Registration successful. Please confirm your email." });
+            var res = await userManager.CreateAsync(user, model.Password);
+            if (res.Succeeded)
+            {
+                var resRole = await userManager.AddToRoleAsync(user, "Customer");
+                if (resRole.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, false);
+                    return Ok("Registered Successfully");
+                }
+                else
+                {
+                    return BadRequest("Failed to assign role");
+                }
+            }
+            else
+            {
+                return BadRequest(res.Errors.Select(e => e.Description));
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("ExternalLogin")]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl }, Request.Scheme);
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
         }
 
+        [HttpGet("ExternalLoginCallback")]
+        public async Task<IActionResult> ExternalLoginCallback()
+        {
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return BadRequest("External login information is unavailable.");
+            }
+
+            var user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            if (user == null)
+            {
+                // Create a new user if they do not exist
+                user = new AppUser
+                {
+                    UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    FName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                    LName = info.Principal.FindFirstValue(ClaimTypes.Surname),
+                    City = "Unknown",
+                    Street = "Unknown",
+                    Governate = "Unknown"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return BadRequest("User creation failed.");
+                }
+
+                await userManager.AddLoginAsync(user, info);
+            }
+
+            await signInManager.SignInAsync(user, isPersistent: false);
+
+            // Generate JWT Token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"); // Use a secure key
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email)
+            }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return Ok(new { token = tokenHandler.WriteToken(token) });
+        }
+        /// //////////////////////////////////////////////////////////////
         [HttpGet("ConfirmEmail")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
