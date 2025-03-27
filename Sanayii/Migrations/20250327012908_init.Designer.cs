@@ -12,8 +12,8 @@ using Snai3y.Repository.Data;
 namespace Sanayii.Migrations
 {
     [DbContext(typeof(SanayiiContext))]
-    [Migration("20250326212029_AddAuditLogandAdminNotifi.table")]
-    partial class AddAuditLogandAdminNotifitable
+    [Migration("20250327012908_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
