@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sanayii.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,26 @@ namespace Sanayii.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuditLog",
+                columns: table => new
+                {
+                    AuditId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    TableName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OldValues = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    NewValues = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    AffectedColumns = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    PrimaryKey = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuditLog", x => x.AuditId);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,44 +73,6 @@ namespace Sanayii.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PaymentMethods",
-                columns: table => new
-                {
-                    PaymentId = table.Column<int>(type: "int", nullable: false),
-                    Method = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PaymentMethods", x => new { x.PaymentId, x.Method });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserPhones",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserPhones", x => new { x.UserId, x.PhoneNumber });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -101,6 +83,7 @@ namespace Sanayii.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Governate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -148,6 +131,7 @@ namespace Sanayii.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ServiceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdditionalPrice = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BasePrice = table.Column<double>(type: "float", nullable: false),
@@ -160,6 +144,24 @@ namespace Sanayii.Migrations
                         name: "FK_Service_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    PaymentId = table.Column<int>(type: "int", nullable: false),
+                    Method = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => new { x.PaymentId, x.Method });
+                    table.ForeignKey(
+                        name: "FK_PaymentMethods_Payment_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -267,6 +269,24 @@ namespace Sanayii.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserPhones",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPhones", x => new { x.UserId, x.PhoneNumber });
+                    table.ForeignKey(
+                        name: "FK_UserPhones_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 columns: table => new
                 {
@@ -359,6 +379,38 @@ namespace Sanayii.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ArtisanId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Review", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Review_Artisans_ArtisanId",
+                        column: x => x.ArtisanId,
+                        principalTable: "Artisans",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Review_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Review_Service_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Service",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ServiceRequestPayment",
                 columns: table => new
                 {
@@ -426,6 +478,16 @@ namespace Sanayii.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AuditLog_TableName",
+                table: "AuditLog",
+                column: "TableName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuditLog_Timestamp",
+                table: "AuditLog",
+                column: "Timestamp");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contract_ArtisanId",
                 table: "Contract",
                 column: "ArtisanId",
@@ -436,6 +498,21 @@ namespace Sanayii.Migrations
                 table: "Discount",
                 column: "CustomerId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_ArtisanId",
+                table: "Review",
+                column: "ArtisanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_CustomerId",
+                table: "Review",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_ServiceId",
+                table: "Review",
+                column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -497,16 +574,19 @@ namespace Sanayii.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
+                name: "AuditLog");
+
+            migrationBuilder.DropTable(
                 name: "Discount");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethods");
 
             migrationBuilder.DropTable(
-                name: "RoleClaims");
+                name: "Review");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "RoleClaims");
 
             migrationBuilder.DropTable(
                 name: "ServiceRequestPayment");

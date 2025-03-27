@@ -46,50 +46,63 @@ namespace Sanayii.Controllers
                 return BadRequest(ModelState);
             }
 
-            AppUser user = await userManager.FindByNameAsync(model.Username);
+            // Find user by username or email
+            AppUser user = await userManager.FindByNameAsync(model.Username) ?? await userManager.FindByEmailAsync(model.Username);
             if (user == null)
-            {
-                return BadRequest("User not found!");
-            }
-
-            List<Claim> UserClaims = new List<Claim>(); //ID,NAME,ROLE
-            // Token Generated id change (JWT predefined Claims JIT)
-            UserClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-            UserClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-            UserClaims.Add(new Claim(ClaimTypes.Name, user.UserName));
-
-            var UserRoles = await userManager.GetRolesAsync(user);
-            foreach (var item in UserRoles)
-            {
-                UserClaims.Add(new Claim(ClaimTypes.Role, item));
-            }
-            var SignInKey =
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"));
-            SigningCredentials signingCred = new SigningCredentials(SignInKey, SecurityAlgorithms.HmacSha256);
-            var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
-            {
-                //design token
-                JwtSecurityToken token = new JwtSecurityToken(
-                    issuer: "http://localhost:5127/",
-                    audience: "http://localhost:4200/",
-                    expires: DateTime.Now.AddHours(1),
-                    claims: UserClaims,
-                    signingCredentials: signingCred
-                    );
-                // generate token response
-
-                return Ok("Login Successfully" +
-                    new
-                    {
-                        token = new JwtSecurityTokenHandler().WriteToken(token),
-                        expiration = token.ValidTo
-                    });
-            }
-            else
             {
                 return BadRequest("Invalid username or password");
             }
+
+            // Check if email is confirmed (if required)
+            if (!user.EmailConfirmed)
+            {
+                return BadRequest("Email is not confirmed. Please check your inbox.");
+            }
+
+            // Check password
+            var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+            if (!result.Succeeded)
+            {
+                if (result.IsLockedOut)
+                    return BadRequest("User account is locked out. Please try again later.");
+                if (result.IsNotAllowed)
+                    return BadRequest("Login not allowed for this user.");
+                return BadRequest("Invalid username or password");
+            }
+
+            // Create JWT Token
+            var userClaims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(ClaimTypes.Email, user.Email)
+    };
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
+            {
+                userClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: "http://localhost:5127/",
+                audience: "http://localhost:4200/",
+                expires: DateTime.UtcNow.AddHours(1),
+                claims: userClaims,
+                signingCredentials: creds
+            );
+
+            return Ok(new
+            {
+                message = "Login successful",
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                expiration = token.ValidTo
+            });
         }
 
         [HttpPost("Register")]
@@ -149,6 +162,7 @@ namespace Sanayii.Controllers
             return Challenge(properties, provider);
         }
 
+        /// //////////////////////////////////////////////////////////////
         [HttpGet("ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
@@ -199,45 +213,9 @@ namespace Sanayii.Controllers
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return Ok(new { token = tokenHandler.WriteToken(token) });
         }
-        /// //////////////////////////////////////////////////////////////
-        [HttpGet("ConfirmEmail")]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string token)
-        {
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
-                return BadRequest(new { message = "Invalid confirmation link." });
-
-            var user = await userManager.FindByIdAsync(userId);
-            if (user == null)
-                return NotFound(new { message = "User not found." });
-
-            try
-            {
-                // Decode the Base64 token
-                var decodedBytes = Convert.FromBase64String(WebUtility.UrlDecode(token));
-                var decodedToken = System.Text.Encoding.UTF8.GetString(decodedBytes);
-
-                var result = await userManager.ConfirmEmailAsync(user, decodedToken);
-                if (result.Succeeded)
-                    return Ok(new { message = "Email confirmed successfully." });
-
-                return BadRequest(new
-                {
-                    message = "Email confirmation failed. The link may have expired or is invalid.",
-                    action = "Please request a new confirmation email.",
-                    resendUrl = $"{Request.Scheme}://{Request.Host}/api/Account/ResendConfirmationEmail?email={user.Email}"
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while confirming your email.", error = ex.Message });
-            }
-        }
-
         private async Task SendConfirmationEmail(AppUser user)
         {
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
