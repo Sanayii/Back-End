@@ -108,22 +108,12 @@ namespace Sanayii.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            var role1 = new IdentityRole() { Name = "Customer" };
-            var role2 = new IdentityRole() { Name = "Admin" };
-            var role3 = new IdentityRole() { Name = "Artisan" };
-
-            await roleManager.CreateAsync(role1);
-            await roleManager.CreateAsync(role2);
-            await roleManager.CreateAsync(role3);
-
-
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new AppUser
+            var user = new Customer
             {
                 UserName = model.Username,
                 Email = model.Email,

@@ -13,7 +13,7 @@ using Twilio.Annotations;
 
 namespace Snai3y.Repository.Data
 {
-    class SanayiiContext : IdentityDbContext<AppUser>
+    public class SanayiiContext : IdentityDbContext<AppUser>
     {
         public SanayiiContext(DbContextOptions<SanayiiContext> options) : base(options)
         {
