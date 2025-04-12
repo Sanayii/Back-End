@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sanayii.ViewModel
+namespace Sanayii.DTOs.AccountDTO
 {
-    public class ConfirmPhoneNumberViewModel
+    public class ConfirmPhoneNumberDTO
     {
         [Phone(ErrorMessage = "Please Enter a Valid Phone Number")]
         [Required(ErrorMessage = "Please Enter Phone Number")]

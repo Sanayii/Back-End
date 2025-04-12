@@ -20,5 +20,7 @@ namespace Sanayii.Core.Entities
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
         public string CustomerId { get; set; }
+        public ICollection<CustomerDiscount> CustomerDiscounts { get; set; } = new HashSet<CustomerDiscount>();
     }
+
 }

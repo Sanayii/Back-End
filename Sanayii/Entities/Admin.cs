@@ -9,8 +9,6 @@ namespace Sanayii.Core.Entities
 {
     public class Admin : AppUser
     {
-        [ForeignKey("AppUser")]
-        public string Id { get; set; }
         public decimal Salary { get; set; }
     }
 }

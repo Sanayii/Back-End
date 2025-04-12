@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sanayii.ViewModel
+namespace Sanayii.DTOs.AccountDTO
 {
-    public class LoginViewModel
+    public class LoginDTO
     {
         [Required]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 30 characters.")]

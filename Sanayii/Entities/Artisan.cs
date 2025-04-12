@@ -9,8 +9,6 @@ namespace Sanayii.Core.Entities
 {
     public class Artisan:AppUser
     {
-        [ForeignKey("AppUser")]
-        public string Id {  get; set; }
         public int NationalityId { get; set; }
         public int Rating { get; set; }
         public Contract Contract { get; set; }

@@ -7,6 +7,7 @@ using Sanayii.Services;
 using Snai3y.Repository.Data;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Sanayii.MapperConfig;
 
 namespace Sanayii
 {
@@ -64,10 +65,9 @@ namespace Sanayii
                 options.AddPolicy("AllowSpecific",
                     policy =>
                     {
-                        policy.WithOrigins("https://localhost:7234", "http://localhost:7234", "http://localhost:4200") // Add your front-end URL
+                        policy.AllowAnyOrigin()
                               .AllowAnyHeader()
-                              .AllowAnyMethod()
-                              .AllowCredentials();
+                              .AllowAnyMethod();
                     });
             });
 
@@ -91,21 +91,7 @@ namespace Sanayii
                 options.TokenLifespan = TimeSpan.FromMinutes(30);
             });
 
-            // Authentication Services
-            builder.Services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.ClientId = "567858261531-ml2g00s3pd8qm9647ac94f65m6l8a2iq.apps.googleusercontent.com";
-                    options.ClientSecret = "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";
-                    options.CallbackPath = "/signin-google";
-                })
-                .AddFacebook(options =>
-                {
-                    options.AppId = "1786811492250782"; // Replace with your Facebook App ID
-                    options.AppSecret = "b31e78cb811d0ca8f9252697c512ce27";
-                    options.CallbackPath = "/signin-facebook";
-                });
-
+            var config = builder.Configuration;
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -115,19 +101,33 @@ namespace Sanayii
             .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
-                options.RequireHttpsMetadata = true; // Ensure HTTPS for security
+                options.RequireHttpsMetadata = true; // Keep HTTPS in production
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "http://localhost:5127/",
                     ValidateAudience = true,
-                    ValidAudience = "http://localhost:5127/",
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%")) // Use environment config
+                    ValidIssuer = config["JwtSettings:Issuer"],
+                    ValidAudience = config["JwtSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(config["JwtSettings:Key"])
+                    )
                 };
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = config["Authentication:Google:ClientId"];
+                options.ClientSecret = config["Authentication:Google:ClientSecret"];
+                options.CallbackPath = "/signin-google";
+            })
+            .AddFacebook(options =>
+            {
+                options.AppId = config["Authentication:Facebook:AppId"];
+                options.AppSecret = config["Authentication:Facebook:AppSecret"];
+                options.CallbackPath = "/signin-facebook";
             });
-
+            builder.Services.AddAutoMapper(typeof(mappConfig));
             var app = builder.Build();
 
             // Apply CORS Policy
@@ -140,7 +140,6 @@ namespace Sanayii
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                    c.RoutePrefix = string.Empty; // Open Swagger as default
                 });
             }
 
@@ -149,7 +148,7 @@ namespace Sanayii
             app.UseAuthorization();
 
             app.MapControllers();
-            app.MapRazorPages(); // Required for Razor Pages
+            app.MapRazorPages();
 
             app.Run();
         }

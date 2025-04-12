@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sanayii.ViewModel
+namespace Sanayii.DTOs.AccountDTO
 {
-    public class ResetPasswordViewModel
+    public class ResetPasswordDTO
     {
         [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]

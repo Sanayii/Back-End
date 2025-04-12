@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Sanayii.Core.Entities;
+using Sanayii.DTOs.AccountDTO;
 using Sanayii.Services;
-using Sanayii.ViewModel;
+using Snai3y.Repository.Data;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -28,18 +30,22 @@ namespace Sanayii.Controllers
         private readonly EmailSenderService emailSender;
         private readonly SMSSender smsSender;
         private readonly RoleManager<IdentityRole> roleManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, SMSSender smsSender, EmailSenderService emailSender, RoleManager<IdentityRole> roleManager)
+        private readonly SanayiiContext db;
+        IMapper mapper;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, SMSSender smsSender, EmailSenderService emailSender, RoleManager<IdentityRole> roleManager,IMapper mapper,SanayiiContext db)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.smsSender = smsSender;
             this.emailSender = emailSender;
             this.roleManager = roleManager;
+            this.mapper = mapper;
+            this.db = db;
         }
 
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -73,12 +79,12 @@ namespace Sanayii.Controllers
 
             // Create JWT Token
             var userClaims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.Id),
-        new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(ClaimTypes.Email, user.Email)
-    };
+                {
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email)
+                };
 
             var userRoles = await userManager.GetRolesAsync(user);
             foreach (var role in userRoles)
@@ -106,24 +112,14 @@ namespace Sanayii.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var user = new Customer
-            {
-                UserName = model.Username,
-                Email = model.Email,
-                FName = model.FName,
-                LName = model.LName,
-                City = model.City,
-                Street = model.Street,
-                Governate = model.Government
-            };
-
+            
+            Customer user = mapper.Map<Customer>(model);
             var res = await userManager.CreateAsync(user, model.Password);
             if (res.Succeeded)
             {
@@ -131,6 +127,19 @@ namespace Sanayii.Controllers
                 if (resRole.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);
+                    if (model.PhoneNumbers != null && model.PhoneNumbers.Count > 0)
+                    {
+                        foreach (var phone in model.PhoneNumbers)
+                        {
+                            db.Add(new UserPhones
+                            {
+                                UserId = user.Id,
+                                PhoneNumber = phone
+                            });
+                        }
+
+                        await db.SaveChangesAsync();
+                    }
                     return Ok("Registered Successfully");
                 }
                 else
@@ -152,7 +161,6 @@ namespace Sanayii.Controllers
             return Challenge(properties, provider);
         }
 
-        /// //////////////////////////////////////////////////////////////
         [HttpGet("ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
@@ -174,7 +182,7 @@ namespace Sanayii.Controllers
                     LName = info.Principal.FindFirstValue(ClaimTypes.Surname),
                     City = "Unknown",
                     Street = "Unknown",
-                    Governate = "Unknown"
+                    Government = "Unknown"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -322,7 +330,7 @@ namespace Sanayii.Controllers
 
         [HttpPost("ResetPassword")]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -343,7 +351,7 @@ namespace Sanayii.Controllers
         }
         [Authorize]
         [HttpPost("SendPhoneVerificationCode")]
-        public async Task<IActionResult> SendPhoneVerificationCode(ConfirmPhoneNumberViewModel model)
+        public async Task<IActionResult> SendPhoneVerificationCode(ConfirmPhoneNumberDTO model)
         {
             if (ModelState.IsValid && !string.IsNullOrEmpty(model.PhoneNumber))
             {
@@ -408,7 +416,7 @@ namespace Sanayii.Controllers
 
         [Authorize]
         [HttpPost("VerifyPhoneNumber")]
-        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -470,7 +478,7 @@ namespace Sanayii.Controllers
 
         [Authorize]
         [HttpPost("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordDTO model)
         {
             if (!ModelState.IsValid)
             {
