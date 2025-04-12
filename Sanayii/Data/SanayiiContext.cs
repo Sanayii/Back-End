@@ -1,15 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Sanayii.Core.Entities;
 using Sanayii.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Twilio.Annotations;
 
 namespace Snai3y.Repository.Data
 {
@@ -30,7 +23,6 @@ namespace Snai3y.Repository.Data
                 UP.PhoneNumber
             });
 
-            // Composite PK for PaymentMethods
             modelBuilder.Entity<PaymentMethods>().HasKey(PM => new
             {
                 PM.PaymentId,
@@ -53,24 +45,10 @@ namespace Snai3y.Repository.Data
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
-            // Ensure Artisan and Admin `Id` is also an FK to `AppUser`
-            modelBuilder.Entity<Artisan>()
-                .ToTable("Artisans")
-                .HasOne<AppUser>()
-                .WithOne()
-                .HasForeignKey<Artisan>(a => a.Id);
-
-            modelBuilder.Entity<Admin>()
-                .ToTable("Admins")
-                .HasOne<AppUser>()
-                .WithOne()
-                .HasForeignKey<Admin>(a => a.Id);
-
-            modelBuilder.Entity<Customer>()
-                .ToTable("Customer")
-                .HasOne<AppUser>()
-                .WithOne()
-                .HasForeignKey<Customer>(c => c.Id);
+            // Configure Table-per-Type (TPT) Inheritance
+            modelBuilder.Entity<Customer>().ToTable("Customer");
+            modelBuilder.Entity<Artisan>().ToTable("Artisans");
+            modelBuilder.Entity<Admin>().ToTable("Admins");
 
             // Configure foreign key constraints for Reviews table
             modelBuilder.Entity<Review>()
@@ -143,7 +121,25 @@ namespace Snai3y.Repository.Data
                 // Index for Faster Queries on TableName and Timestamp
                 entity.HasIndex(a => a.TableName);
                 entity.HasIndex(a => a.Timestamp);
+
             });
+            // Configure the many-to-many relationship with the extra field in the join table
+            modelBuilder.Entity<CustomerDiscount>()
+                .HasKey(cd => new { cd.CustomerId, cd.DiscountId });
+
+            modelBuilder.Entity<CustomerDiscount>()
+                .HasOne(cd => cd.Customer)
+                .WithMany(c => c.CustomerDiscounts)
+                .HasForeignKey(cd => cd.CustomerId);
+
+            modelBuilder.Entity<CustomerDiscount>()
+                .HasOne(cd => cd.Discount)
+                .WithMany(d => d.CustomerDiscounts)
+                .HasForeignKey(cd => cd.DiscountId);
+
+            // Optionally: You can specify the table name if you want to use a custom table name
+            modelBuilder.Entity<CustomerDiscount>()
+                .ToTable("CustomerDiscounts");
         }
 
         public DbSet<Artisan> Artisans { get; set; }

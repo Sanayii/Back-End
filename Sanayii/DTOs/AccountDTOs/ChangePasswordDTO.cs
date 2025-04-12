@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sanayii.ViewModel
+namespace Sanayii.DTOs.AccountDTO
 {
-    public class ChangePasswordViewModel
+    public class ChangePasswordDTO
     {
         [Required(ErrorMessage = "Current Password is required.")]
         [DataType(DataType.Password, ErrorMessage = "Please enter a valid password.")]

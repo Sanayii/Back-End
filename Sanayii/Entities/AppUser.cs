@@ -14,7 +14,7 @@ namespace Sanayii.Core.Entities
         public int Age { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
-        public string Governate { get; set; }
+        public string Government { get; set; }
 
         public Boolean IsDeleted { get; set; } = false;//default value is false
 

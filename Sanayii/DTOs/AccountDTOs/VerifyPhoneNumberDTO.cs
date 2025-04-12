@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sanayii.ViewModel
+namespace Sanayii.DTOs.AccountDTO
 {
-    public class VerifyPhoneNumberViewModel
+    public class VerifyPhoneNumberDTO
     {
         [Required(ErrorMessage = "Verification code is required.")]
         [StringLength(6, MinimumLength = 6, ErrorMessage = "Verification code must be 6 digits.")]
