@@ -14,7 +14,6 @@ namespace Sanayii.UnitOfWorks
         GenericRepository<Category> categoryRopo;
         GenericRepository<Service> serviceRopo;
 
-        GenericRepository<PaymentMethods> paymentMethodsRopo;
         GenericRepository<Payment> paymentRepo;
 
         GenericRepository<Admin> adminRepo;
@@ -73,19 +72,6 @@ namespace Sanayii.UnitOfWorks
                 return serviceRopo;
             }
         }
-
-        public GenericRepository<PaymentMethods> _paymentMethodsRopo
-        {
-            get
-            {
-                if (paymentMethodsRopo == null)
-                {
-                    paymentMethodsRopo = new GenericRepository<PaymentMethods>(db);
-                }
-                return paymentMethodsRopo;
-            }
-        }
-
         public GenericRepository<Payment> _paymentRopo
         {
             get

@@ -23,12 +23,6 @@ namespace Snai3y.Repository.Data
                 UP.PhoneNumber
             });
 
-            modelBuilder.Entity<PaymentMethods>().HasKey(PM => new
-            {
-                PM.PaymentId,
-                PM.Method
-            });
-
             // Composite PK for ServiceRequestPayment
             modelBuilder.Entity<ServiceRequestPayment>().HasKey(SRP => new
             {
@@ -49,6 +43,10 @@ namespace Snai3y.Repository.Data
             modelBuilder.Entity<Customer>().ToTable("Customer");
             modelBuilder.Entity<Artisan>().ToTable("Artisans");
             modelBuilder.Entity<Admin>().ToTable("Admins");
+
+            modelBuilder.Entity<Payment>()
+            .Property(p => p.Method)
+            .HasConversion<string>();
 
             // Configure foreign key constraints for Reviews table
             modelBuilder.Entity<Review>()
