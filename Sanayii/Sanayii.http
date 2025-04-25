@@ -1,6 +1,0 @@
-@Sanayii_HostAddress = http://localhost:5287
-
-GET {{Sanayii_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
