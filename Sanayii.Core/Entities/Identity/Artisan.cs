@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sanayii.Core.Entities
+namespace Sanayii.Core.Entities.Identity
 {
     public class Artisan : AppUser
     {

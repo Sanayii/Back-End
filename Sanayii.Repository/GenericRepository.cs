@@ -29,6 +29,11 @@ namespace Sanayii.Repository
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByNameAsync(string name)
+        {
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(E => EF.Property<string>(E, "Name") == name);
+        }
+
         public async Task Add(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
@@ -45,5 +50,9 @@ namespace Sanayii.Repository
         }
 
 
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

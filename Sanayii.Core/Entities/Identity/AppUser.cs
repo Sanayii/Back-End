@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sanayii.Core.Entities
+namespace Sanayii.Core.Entities.Identity
 {
     public class AppUser : IdentityUser
     {
@@ -16,7 +16,7 @@ namespace Sanayii.Core.Entities
         public string Street { get; set; }
         public string Government { get; set; }
 
-        public Boolean IsDeleted { get; set; } = false;//default value is false
+        public bool IsDeleted { get; set; } = false;//default value is false
 
         //navigation property as user can have many phone numbers.
         public ICollection<UserPhones> UserPhones { get; set; } = new HashSet<UserPhones>();

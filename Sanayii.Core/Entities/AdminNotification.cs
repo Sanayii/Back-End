@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sanayii.Core.Entities.Identity;
 
 namespace Sanayii.Core.Entities
 {

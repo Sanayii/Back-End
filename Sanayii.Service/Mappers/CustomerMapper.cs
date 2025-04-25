@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Sanayii.Core.DTOs.AccountDTOs;
-using Sanayii.Core.Entities;
+using Sanayii.Core.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

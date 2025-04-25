@@ -17,6 +17,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using UAParser;
+using Sanayii.Core.Entities.Identity;
 
 namespace Sanayii.Controllers
 {

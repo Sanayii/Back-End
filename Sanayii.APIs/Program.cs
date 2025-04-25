@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sanayii.APIs.Extensions;
 using Sanayii.APIs.Services;
@@ -48,6 +48,10 @@ namespace Sanayii
                     });
             });
 
+            builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddSwaggerGen();
+
 
             #endregion
 
@@ -84,6 +88,13 @@ namespace Sanayii
                 app.UseSwaggerMiddlewares();
             }
 
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+            ;
+
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -93,6 +104,7 @@ namespace Sanayii
             app.UseCors("AllowSpecific");
 
             app.MapControllers();
+
             //app.MapRazorPages(); //  Required for Razor Pages
 
             #endregion

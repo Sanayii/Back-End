@@ -13,10 +13,14 @@ namespace Sanayii.Core.Repositories
 
         Task<T> GetByIdAsync(int id);
 
+        Task<T> GetByNameAsync(string name);
+
         Task Add(T entity);
 
         void Update(T entity);
 
         void Delete(T entity);
+
+        Task SaveChangesAsync();
     }
 }
