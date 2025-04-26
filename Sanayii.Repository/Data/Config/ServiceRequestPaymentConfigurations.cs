@@ -15,6 +15,7 @@ namespace Sanayii.Repository.Data.Config
         public void Configure(EntityTypeBuilder<ServiceRequestPayment> builder)
         {
             // Composite PK for ServiceRequestPayment
+            builder.ToTable("ServiceRequestPayment");
             builder.HasKey(SRP => new
             {
                 SRP.CustomerId,

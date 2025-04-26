@@ -14,11 +14,12 @@ namespace Sanayii.Repository.Data.Config
     {
         public void Configure(EntityTypeBuilder<Payment> builder)
         {
+            builder.ToTable("payment");
             builder.Property(p => p.Method)
-            .HasConversion<string>();
+            .HasConversion<int>();
 
             builder.Property(p => p.Status)
-            .HasConversion<string>();
+            .HasConversion<int>();
         }
     }
 }

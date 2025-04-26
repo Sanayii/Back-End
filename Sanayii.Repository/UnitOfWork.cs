@@ -17,12 +17,26 @@ namespace Sanayii.Repository
 
         private Hashtable _repositories;
 
+        private ServiceRequestPaymentRepository _serviceRequestPaymentRepository;
+
         public UnitOfWork(SanayiiContext dbContext)
         {
             _dbContext = dbContext;
 
             // Initialize the repository hashtable
             _repositories = new Hashtable();
+        }
+
+        public ServiceRequestPaymentRepository ServiceRequestPaymentRepository
+        {
+            get
+            {
+                if (_serviceRequestPaymentRepository == null)
+                {
+                    _serviceRequestPaymentRepository = new ServiceRequestPaymentRepository(_dbContext);
+                }
+                return _serviceRequestPaymentRepository;
+            }
         }
 
         public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity
