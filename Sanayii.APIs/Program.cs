@@ -10,6 +10,7 @@ using Sanayii.Core.Interfaces;
 using Sanayii.Service.Chat;
 using Sanayii.Core.DTOs.ChatDTOs;
 using System.Text.Json.Nodes;
+using Sanayii.Service.Hubs;
 namespace Sanayii
 {
     public class Program
@@ -64,13 +65,18 @@ namespace Sanayii
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecific",
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-                    });
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200") // Angular App URL
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // Important for SignalR
+                });
+
             });
 
-
+            // Add SignalR services to the DI container
+            builder.Services.AddSignalR();
             #endregion
 
 
@@ -97,34 +103,33 @@ namespace Sanayii
             #endregion
 
 
-
-            
-
-            
-            #region Configure HTTP Requests Pipeline
             // Configure Middleware
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerMiddlewares();
-               
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.MapControllers();
-
             app.UseStaticFiles();
+
+            // Add this line before endpoints!
+            app.UseRouting();
 
             app.UseCors("AllowSpecific");
 
-            app.MapControllers();
-            //app.MapRazorPages(); //  Required for Razor Pages
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            #endregion
-
+            // Now map hubs and controllers
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/NotificationHub");
+            });
 
             app.Run();
+
         }
     }
 }
