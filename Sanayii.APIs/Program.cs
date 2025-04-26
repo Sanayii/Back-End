@@ -6,7 +6,10 @@ using Sanayii.Core.Entities;
 using Sanayii.Services;
 using Sanayii.Repository.Data;
 using System.Threading.Tasks;
-
+using Sanayii.Core.Interfaces;
+using Sanayii.Service.Chat;
+using Sanayii.Core.DTOs.ChatDTOs;
+using System.Text.Json.Nodes;
 namespace Sanayii
 {
     public class Program
@@ -22,6 +25,10 @@ namespace Sanayii
             builder.Services.AddControllers(); // Apply API Configurations
             //builder.Services.AddRazorPages(); // Add if using Razor Pages
 
+            //logging
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
+            builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
             // Configure Swagger
             builder.Services.AddSwaggerServices();
@@ -33,10 +40,25 @@ namespace Sanayii
             // Identity Configuration
             builder.Services.AddIdentityServices(builder.Configuration);
 
+
             // Add Application Services
             builder.Services.AddApplicationServices();
 
-
+            //Registeration for Api chat 
+            
+            // ???? ??????:
+             //builder.Services.AddHttpClient<IChatService, ChatService>();
+            // Add to your services configuration
+            builder.Services.AddHttpClient<IChatService, ChatService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddSingleton(provider =>
+            {
+                var config = provider.GetRequiredService<IConfiguration>();
+                return new ChatService(
+                    provider.GetRequiredService<HttpClient>(),
+                    config,
+                    provider.GetRequiredService<ILogger<ChatService>>());
+            });
 
             // CORS Configuration
             builder.Services.AddCors(options =>
@@ -76,17 +98,21 @@ namespace Sanayii
 
 
 
+            
 
+            
             #region Configure HTTP Requests Pipeline
             // Configure Middleware
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerMiddlewares();
+               
             }
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapControllers();
 
             app.UseStaticFiles();
 
