@@ -456,7 +456,7 @@ namespace Sanayii.Repository.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -548,6 +548,10 @@ namespace Sanayii.Repository.Migrations
                     b.Property<int>("ExecutionTime")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CustomerId", "PaymentId", "ServiceId");
 
                     b.HasIndex("PaymentId");
@@ -559,18 +563,13 @@ namespace Sanayii.Repository.Migrations
 
             modelBuilder.Entity("Sanayii.Core.Entities.UserConnection", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ConnectionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("ConnectionId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "ConnectionId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("UserConnections");
                 });
@@ -824,7 +823,9 @@ namespace Sanayii.Repository.Migrations
                 {
                     b.HasOne("Sanayii.Core.Entities.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

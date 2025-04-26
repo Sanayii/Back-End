@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sanayii.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Sanayii.Core.Entities
     {
         public DateTime CreatedAt { get; set; }
         public int ExecutionTime { get; set; }
-        public string Status { get; set; }
+        public ServiceStatus Status { get; set; }
 
         [ForeignKey("CustomerId")]
         public Customer Customer { get; set; }
