@@ -45,8 +45,8 @@ namespace Sanayii.APIs.Controllers
         }
 
         // GET : api/Categories/{name}
-        [HttpGet]
-        public async Task<ActionResult<Category>> GetCategoryByName([FromQuery] string name)
+        [HttpGet("{name}")]
+        public async Task<ActionResult<Category>> GetCategoryByName(string name)
         {
             var category = await _categories.GetByNameAsync(name);
 
