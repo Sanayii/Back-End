@@ -9,18 +9,18 @@ using Sanayii.Repository.Data;
 
 #nullable disable
 
-namespace Sanayii.Migrations
+namespace Sanayii.Repository.Migrations
 {
     [DbContext(typeof(SanayiiContext))]
-    [Migration("20250324123215_Init")]
-    partial class Init
+    [Migration("20250426140317_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -50,25 +50,6 @@ namespace Sanayii.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<string>", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -177,7 +158,7 @@ namespace Sanayii.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.AppUser", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -207,9 +188,12 @@ namespace Sanayii.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Governate")
+                    b.Property<string>("Government")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LName")
                         .IsRequired()
@@ -267,7 +251,58 @@ namespace Sanayii.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Category", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.AuditLog", b =>
+                {
+                    b.Property<int>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuditId"));
+
+                    b.Property<string>("AffectedColumns")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<string>("NewValues")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<string>("OldValues")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<string>("PrimaryKey")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<string>("TableName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("TableName");
+
+                    b.HasIndex("Timestamp");
+
+                    b.ToTable("AuditLog");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -284,7 +319,7 @@ namespace Sanayii.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Contract", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Contract", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +352,25 @@ namespace Sanayii.Migrations
                     b.ToTable("Contract");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Discount", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.CustomerDiscount", b =>
+                {
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateGiven")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CustomerId", "DiscountId");
+
+                    b.HasIndex("DiscountId");
+
+                    b.ToTable("CustomerDiscounts", (string)null);
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Discount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -356,7 +409,40 @@ namespace Sanayii.Migrations
                     b.ToTable("Discount");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Payment", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Payment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -367,29 +453,56 @@ namespace Sanayii.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Method")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Payment");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.PaymentMethods", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Review", b =>
                 {
-                    b.Property<int>("PaymentId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Method")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ArtisanId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PaymentId", "Method");
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.ToTable("PaymentMethods");
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtisanId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Service", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Service", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -410,6 +523,10 @@ namespace Sanayii.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ServiceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -417,7 +534,7 @@ namespace Sanayii.Migrations
                     b.ToTable("Service");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.ServiceRequestPayment", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.ServiceRequestPayment", b =>
                 {
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
@@ -443,7 +560,25 @@ namespace Sanayii.Migrations
                     b.ToTable("ServiceRequestPayment");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.UserPhones", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.UserConnection", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConnectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "ConnectionId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("UserConnections");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.UserPhones", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -456,7 +591,7 @@ namespace Sanayii.Migrations
                     b.ToTable("UserPhones");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Violation", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Violation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -476,7 +611,7 @@ namespace Sanayii.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
 
@@ -485,9 +620,9 @@ namespace Sanayii.Migrations
                     b.ToTable("Violation");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Admin", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Admin", b =>
                 {
-                    b.HasBaseType("Snai3y.Core.Entities.AppUser");
+                    b.HasBaseType("Sanayii.Core.Entities.AppUser");
 
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
@@ -495,9 +630,9 @@ namespace Sanayii.Migrations
                     b.ToTable("Admins", (string)null);
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Artisan", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Artisan", b =>
                 {
-                    b.HasBaseType("Snai3y.Core.Entities.AppUser");
+                    b.HasBaseType("Sanayii.Core.Entities.AppUser");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -513,9 +648,9 @@ namespace Sanayii.Migrations
                     b.ToTable("Artisans", (string)null);
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Customer", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Customer", b =>
                 {
-                    b.HasBaseType("Snai3y.Core.Entities.AppUser");
+                    b.HasBaseType("Sanayii.Core.Entities.AppUser");
 
                     b.ToTable("Customer", (string)null);
                 });
@@ -531,7 +666,7 @@ namespace Sanayii.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -540,7 +675,7 @@ namespace Sanayii.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -555,7 +690,7 @@ namespace Sanayii.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -564,38 +699,95 @@ namespace Sanayii.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Contract", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Contract", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.Artisan", "Artisan")
+                    b.HasOne("Sanayii.Core.Entities.Artisan", "Artisan")
                         .WithOne("Contract")
-                        .HasForeignKey("Snai3y.Core.Entities.Contract", "ArtisanId")
+                        .HasForeignKey("Sanayii.Core.Entities.Contract", "ArtisanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Artisan");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Discount", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.CustomerDiscount", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.Customer", "Customer")
+                    b.HasOne("Sanayii.Core.Entities.Customer", "Customer")
+                        .WithMany("CustomerDiscounts")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sanayii.Core.Entities.Discount", "Discount")
+                        .WithMany("CustomerDiscounts")
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Discount");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Discount", b =>
+                {
+                    b.HasOne("Sanayii.Core.Entities.Customer", "Customer")
                         .WithOne("Discount")
-                        .HasForeignKey("Snai3y.Core.Entities.Discount", "CustomerId")
+                        .HasForeignKey("Sanayii.Core.Entities.Discount", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Service", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Notification", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.Category", "Category")
+                    b.HasOne("Sanayii.Core.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Review", b =>
+                {
+                    b.HasOne("Sanayii.Core.Entities.Artisan", "Artisan")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ArtisanId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Sanayii.Core.Entities.Customer", "Customer")
+                        .WithMany("Reviews")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Sanayii.Core.Entities.Service", "Service")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Artisan");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Service", b =>
+                {
+                    b.HasOne("Sanayii.Core.Entities.Category", "Category")
                         .WithMany("Services")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -604,22 +796,22 @@ namespace Sanayii.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.ServiceRequestPayment", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.ServiceRequestPayment", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.Customer", "Customer")
-                        .WithMany()
+                    b.HasOne("Sanayii.Core.Entities.Customer", "Customer")
+                        .WithMany("ServiceRequestPayments")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Snai3y.Core.Entities.Payment", "Payment")
-                        .WithMany()
+                    b.HasOne("Sanayii.Core.Entities.Payment", "Payment")
+                        .WithMany("ServiceRequestPayments")
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Snai3y.Core.Entities.Service", "Service")
-                        .WithMany()
+                    b.HasOne("Sanayii.Core.Entities.Service", "Service")
+                        .WithMany("ServiceRequestPayments")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -631,9 +823,29 @@ namespace Sanayii.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Violation", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.UserConnection", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.Contract", "Contract")
+                    b.HasOne("Sanayii.Core.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.UserPhones", b =>
+                {
+                    b.HasOne("Sanayii.Core.Entities.AppUser", "User")
+                        .WithMany("UserPhones")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Violation", b =>
+                {
+                    b.HasOne("Sanayii.Core.Entities.Contract", "Contract")
                         .WithMany("Violations")
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -642,63 +854,93 @@ namespace Sanayii.Migrations
                     b.Navigation("Contract");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Admin", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Admin", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithOne()
-                        .HasForeignKey("Snai3y.Core.Entities.Admin", "Id")
+                        .HasForeignKey("Sanayii.Core.Entities.Admin", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Artisan", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Artisan", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.Category", "Category")
+                    b.HasOne("Sanayii.Core.Entities.Category", "Category")
                         .WithMany("Artisans")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithOne()
-                        .HasForeignKey("Snai3y.Core.Entities.Artisan", "Id")
+                        .HasForeignKey("Sanayii.Core.Entities.Artisan", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Customer", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Customer", b =>
                 {
-                    b.HasOne("Snai3y.Core.Entities.AppUser", null)
+                    b.HasOne("Sanayii.Core.Entities.AppUser", null)
                         .WithOne()
-                        .HasForeignKey("Snai3y.Core.Entities.Customer", "Id")
+                        .HasForeignKey("Sanayii.Core.Entities.Customer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Category", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.AppUser", b =>
+                {
+                    b.Navigation("UserPhones");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Category", b =>
                 {
                     b.Navigation("Artisans");
 
                     b.Navigation("Services");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Contract", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Contract", b =>
                 {
                     b.Navigation("Violations");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Artisan", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Discount", b =>
+                {
+                    b.Navigation("CustomerDiscounts");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Payment", b =>
+                {
+                    b.Navigation("ServiceRequestPayments");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Service", b =>
+                {
+                    b.Navigation("Reviews");
+
+                    b.Navigation("ServiceRequestPayments");
+                });
+
+            modelBuilder.Entity("Sanayii.Core.Entities.Artisan", b =>
                 {
                     b.Navigation("Contract")
                         .IsRequired();
+
+                    b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("Snai3y.Core.Entities.Customer", b =>
+            modelBuilder.Entity("Sanayii.Core.Entities.Customer", b =>
                 {
+                    b.Navigation("CustomerDiscounts");
+
                     b.Navigation("Discount")
                         .IsRequired();
+
+                    b.Navigation("Reviews");
+
+                    b.Navigation("ServiceRequestPayments");
                 });
 #pragma warning restore 612, 618
         }

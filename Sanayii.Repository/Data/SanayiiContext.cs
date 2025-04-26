@@ -40,12 +40,7 @@ namespace Sanayii.Repository.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Contract> Contracts { get; set; }
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Discount> Discounts { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<ServiceRequestPayment> ServiceRequestPayment { get; set; }
-        public DbSet<ServiceRequestPayment> ServiceRequestPayments { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
     }

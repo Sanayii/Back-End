@@ -8,8 +8,8 @@ namespace Sanayii.Core.Entities
 {
     public class UserConnection
     {
-        public int UserId { get; set; }
-        public int ConnectionId { get; set; }
+        public string UserId { get; set; }
+        public string ConnectionId { get; set; }
         public virtual AppUser User { get; set; }
     }
 }
