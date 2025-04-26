@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sanayii.APIs.Extensions;
 using Sanayii.APIs.Services;
@@ -6,7 +6,11 @@ using Sanayii.Core.Entities;
 using Sanayii.Services;
 using Sanayii.Repository.Data;
 using System.Threading.Tasks;
-
+using Sanayii.Core.Interfaces;
+using Sanayii.Service.Chat;
+using Sanayii.Core.DTOs.ChatDTOs;
+using System.Text.Json.Nodes;
+using Sanayii.Service.Hubs;
 namespace Sanayii
 {
     public class Program
@@ -22,6 +26,10 @@ namespace Sanayii
             builder.Services.AddControllers(); // Apply API Configurations
             //builder.Services.AddRazorPages(); // Add if using Razor Pages
 
+            //logging
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
+            builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
             // Configure Swagger
             builder.Services.AddSwaggerServices();
@@ -33,26 +41,42 @@ namespace Sanayii
             // Identity Configuration
             builder.Services.AddIdentityServices(builder.Configuration);
 
+
             // Add Application Services
             builder.Services.AddApplicationServices();
 
-
+            //Registeration for Api chat 
+            
+            // ???? ??????:
+             //builder.Services.AddHttpClient<IChatService, ChatService>();
+            // Add to your services configuration
+            builder.Services.AddHttpClient<IChatService, ChatService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddSingleton(provider =>
+            {
+                var config = provider.GetRequiredService<IConfiguration>();
+                return new ChatService(
+                    provider.GetRequiredService<HttpClient>(),
+                    config,
+                    provider.GetRequiredService<ILogger<ChatService>>());
+            });
 
             // CORS Configuration
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecific",
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-                    });
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200") // Angular App URL
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // Important for SignalR
+                });
+
             });
 
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen();
-
-
+            // Add SignalR services to the DI container
+            builder.Services.AddSignalR();
             #endregion
 
 
@@ -79,38 +103,33 @@ namespace Sanayii
             #endregion
 
 
-
-
-            #region Configure HTTP Requests Pipeline
             // Configure Middleware
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerMiddlewares();
             }
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-            ;
-
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
             app.UseStaticFiles();
+
+            // Add this line before endpoints!
+            app.UseRouting();
 
             app.UseCors("AllowSpecific");
 
-            app.MapControllers();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            //app.MapRazorPages(); //  Required for Razor Pages
-
-            #endregion
-
+            // Now map hubs and controllers
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/NotificationHub");
+            });
 
             app.Run();
+
         }
     }
 }

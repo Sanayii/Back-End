@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Sanayii.Core.Entities
 {
-    public class UserPhones
+    public class UserConnection
     {
         public string UserId { get; set; }
-        public string PhoneNumber { get; set; }
-
-        // Navigation property:the relationship between User and UserPhones is one-to-many
-        public AppUser User { get; set; }
+        public string ConnectionId { get; set; }
+        public virtual AppUser User { get; set; }
     }
 }

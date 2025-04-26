@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Sanayii.Core.Entities.Identity;
+using Sanayii.Core.Entities;
 using Sanayii.Repository.Data;
 using System.Text;
 

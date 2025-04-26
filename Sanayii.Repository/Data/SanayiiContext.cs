@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Sanayii.Core.Entities;
-using Sanayii.Core.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace Sanayii.Repository.Data
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
             //// ✅ Use Table-Per-Type (TPT) to create separate tables
-            modelBuilder.Entity<AppUser>().UseTptMappingStrategy();
+            //modelBuilder.Entity<AppUser>().UseTptMappingStrategy();
 
 
             // Apply configurations from the assembly
@@ -41,5 +40,8 @@ namespace Sanayii.Repository.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
     }
 }

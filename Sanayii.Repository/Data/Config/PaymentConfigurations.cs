@@ -16,6 +16,9 @@ namespace Sanayii.Repository.Data.Config
         {
             builder.Property(p => p.Method)
             .HasConversion<string>();
+
+            builder.Property(p => p.Status)
+            .HasConversion<string>();
         }
     }
 }
