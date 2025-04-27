@@ -55,7 +55,7 @@ namespace Sanayii.APIs.Controllers
             {
                 Status = PaymentStatus.Pending,
                 Amount = (int)(req.Amount * 100),
-                Method = PaymentMethod.CreditCard
+                Method = PaymentMethods.CreditCard
             };
             _unitOfWork.Repository<Payment>().Add(payment);
             await _unitOfWork.Complete();
