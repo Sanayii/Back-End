@@ -14,9 +14,6 @@ namespace Sanayii.APIs.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
 
-            // SignIn Manager
-            services.AddScoped<SignInManager<AppUser>>();
-
             // Email Sender Service
             services.AddTransient<EmailSenderService>();
 

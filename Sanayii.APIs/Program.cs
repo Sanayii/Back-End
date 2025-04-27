@@ -38,23 +38,20 @@ namespace Sanayii
             builder.Services.AddSwaggerServices();
 
             // Database Connection
-          builder.Services.AddDbContext<SanayiiContext>(options =>
-              options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<SanayiiContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
             // Identity Configuration
             builder.Services.AddIdentityServices(builder.Configuration);
 
-            // unit of work dependency injection
-            builder.Services.AddScoped<UnitOfWork>();
-
             // Add Application Services
             builder.Services.AddApplicationServices();
 
             //Registeration for Api chat 
-            
+
             // ???? ??????:
-             //builder.Services.AddHttpClient<IChatService, ChatService>();
+            //builder.Services.AddHttpClient<IChatService, ChatService>();
             // Add to your services configuration
             builder.Services.AddHttpClient<IChatService, ChatService>();
             builder.Services.AddScoped<IChatService, ChatService>();
