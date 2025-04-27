@@ -10,6 +10,7 @@ using Sanayii.Repository.Data;
 using Sanayii.Repository;
 using Sanayii.Enums;
 using Microsoft.Extensions.Logging;
+using Sanayii.Repository.Repository;
 
 namespace Sanayii.APIs.Controllers
 {
@@ -18,10 +19,10 @@ namespace Sanayii.APIs.Controllers
     public class StripeWebhook : ControllerBase
     {
         private readonly string _webhookSecret;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly UnitOFWork _unitOfWork;
         private readonly ILogger<StripeWebhook> _logger;
 
-        public StripeWebhook(IConfiguration config, UnitOfWork unitOfWork, ILogger<StripeWebhook> logger)
+        public StripeWebhook(IConfiguration config, UnitOFWork unitOfWork, ILogger<StripeWebhook> logger)
         {
             _webhookSecret = config["Stripe:WebhookSecret"];
             _unitOfWork = unitOfWork;
@@ -52,11 +53,11 @@ namespace Sanayii.APIs.Controllers
                     {
                         if (int.TryParse(paymentIntent.Metadata["PaymentId"], out int paymentId))
                         {
-                            var payment = await _unitOfWork.Repository<Payment>().GetByIdAsync(paymentId);
+                            var payment =  _unitOfWork._PaymentRepo.GetById(paymentId);
                             if (payment != null)
                             {
                                 payment.Status = PaymentStatus.Completed;
-                                await _unitOfWork.Complete();
+                                _unitOfWork.save();
                                 _logger.LogInformation($"Payment {paymentId} succeeded.");
                             }
                             else
@@ -79,11 +80,11 @@ namespace Sanayii.APIs.Controllers
                     {
                         if (int.TryParse(paymentIntent.Metadata["PaymentId"], out int paymentId))
                         {
-                            var payment = await _unitOfWork.Repository<Payment>().GetByIdAsync(paymentId);
+                            var payment = _unitOfWork._PaymentRepo.GetById(paymentId);
                             if (payment != null)
                             {
                                 payment.Status = PaymentStatus.Failed;
-                                await _unitOfWork.Complete();
+                                _unitOfWork.save();
                                 _logger.LogInformation($"Payment {paymentId} failed.");
                             }
                             else

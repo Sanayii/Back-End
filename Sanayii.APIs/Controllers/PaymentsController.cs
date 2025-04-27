@@ -10,6 +10,7 @@ using Sanayii.Repository;
 using Sanayii.Enums;
 using Sanayii.Core.DTOs.PaymentDTOs;
 using Microsoft.EntityFrameworkCore;
+using Sanayii.Repository.Repository;
 
 
 namespace Sanayii.APIs.Controllers
@@ -18,9 +19,9 @@ namespace Sanayii.APIs.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork ;
+        private readonly UnitOFWork _unitOfWork ;
         private readonly string _publishableKey;
-        public PaymentsController(IConfiguration config,UnitOfWork unitOfWork)
+        public PaymentsController(IConfiguration config,UnitOFWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _publishableKey = config["Stripe:PublishableKey"];
@@ -57,9 +58,8 @@ namespace Sanayii.APIs.Controllers
                 Amount = (int)(req.Amount * 100),
                 Method = PaymentMethods.CreditCard
             };
-            _unitOfWork.Repository<Payment>().Add(payment);
-            await _unitOfWork.Complete();
-
+            _unitOfWork._PaymentRepo.Add(payment);
+            _unitOfWork.save();
             var srp = new ServiceRequestPayment
             {
                 CustomerId = req.CustomerId,
@@ -69,9 +69,8 @@ namespace Sanayii.APIs.Controllers
                 ExecutionTime = 0,
                 Status = ServiceStatus.Pending
             };
-            _unitOfWork.ServiceRequestPaymentRepository.AddAsync(srp);
-            await _unitOfWork.Complete();
-
+            _unitOfWork._ServiceRequestPaymentRepo.AddAsync(srp);
+            _unitOfWork.save();
 
             return Ok(new { sessionId = session.Id, publishableKey = _publishableKey, paymentId = payment.Id });
         }

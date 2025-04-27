@@ -4,6 +4,7 @@ using Sanayii.Core;
 using Sanayii.Core.Entities;
 using Sanayii.Core.Repositories;
 using Sanayii.Repository;
+using Sanayii.Repository.Repository;
 using Sanayii.Service.Mappers;
 using Sanayii.Services;
 
@@ -24,12 +25,7 @@ namespace Sanayii.APIs.Extensions
             services.AddAutoMapper(typeof(CustomerMapper));
 
             // Apply Generic Repository Dependency Injection
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-            // Apply Unit of Work Dependency Injection
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-
+            services.AddScoped<UnitOFWork>();
 
             return services;
         }

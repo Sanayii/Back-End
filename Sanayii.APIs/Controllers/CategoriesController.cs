@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sanayii.Core.Entities;
 using Sanayii.Core.Repositories;
+using Sanayii.Repository.Repository;
 using Sanayii.Repository.Data;
+using Sanayii.Repository.Repository;
 
 namespace Sanayii.APIs.Controllers
 {
@@ -15,100 +17,45 @@ namespace Sanayii.APIs.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly IGenericRepository<Category> _categories;
+        private readonly UnitOFWork _unitOfWork;
 
-        public CategoriesController(IGenericRepository<Category> categories)
+        public CategoriesController(UnitOFWork unitOFWork)
         {
-            _categories = categories;
+            _unitOfWork = unitOFWork;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Category>>> GetCategories()
+        public IActionResult GetCategories()
         {
-            var categories = await _categories.GetAllAsync();
+            var categories =  _unitOfWork._CategoryRepo.GetAll();
             return Ok(categories);
         }
 
         // GET: api/Categories/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Category>> GetCategoryById(int id)
+        public IActionResult GetCategoryById(int id)
         {
-            var category = await _categories.GetByIdAsync(id);
+            var category = _unitOfWork._CategoryRepo.GetById(id);
 
             if (category is null)
             {
                 return NotFound();
             }
 
-            return category;
+            return Ok(category);
         }
 
-        // GET : api/Categories/{name}
+        //// GET : api/Categories/{name}
         [HttpGet("{name}")]
-        public async Task<ActionResult<Category>> GetCategoryByName(string name)
+        public IActionResult GetCategoryByName(string name)
         {
-            var category = await _categories.GetByNameAsync(name);
+            var category = _unitOfWork._CategoryRepo.getByName(name);
 
             if (category is null)
                 return NotFound();
             else
                 return Ok(category);
         }
-
-        // PUT: api/Categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public ActionResult UpdateCategory(int id, Category category)
-        {
-            if (id != category.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
-
-            var existingCategory = _categories.GetByIdAsync(id);
-            if (existingCategory is null)
-            {
-                return NotFound("Category not found");
-            }
-
-            _categories.Update(category);
-            return NoContent();
-        }
-
-
-
-        // POST: api/Categories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
-        {
-            await _categories.Add(category);
-
-            await _categories.SaveChangesAsync();
-
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
-        }
-
-        // DELETE: api/Categories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
-        {
-            var category = await _categories.GetByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _categories.Delete(category);
-            await _categories.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        //private bool CategoryExists(int id)
-        //{
-        //    return _context.Categories.Any(e => e.Id == id);
-        //}
     }
 }
