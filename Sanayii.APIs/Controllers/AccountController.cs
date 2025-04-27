@@ -53,7 +53,7 @@ namespace Sanayii.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState); 
             }
 
             // Find user by username or email

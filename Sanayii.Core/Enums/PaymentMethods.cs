@@ -1,6 +1,6 @@
 ﻿namespace Sanayii.Enums
 {
-    public enum PaymentMethod
+    public enum PaymentMethods
     {
         Cash = 0,
         CreditCard = 1,
