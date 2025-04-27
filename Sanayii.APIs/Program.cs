@@ -26,6 +26,7 @@ namespace Sanayii
 
             #region Configure Services
             // Add services to the container.
+            builder.Services.AddSignalR();
             builder.Services.AddControllers(); // Apply API Configurations
             //builder.Services.AddRazorPages(); // Add if using Razor Pages
 

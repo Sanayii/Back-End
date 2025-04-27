@@ -20,6 +20,6 @@ namespace Sanayii.Core.Entities
         public bool IsRead { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         // Navigation property
-        public AppUser User { get; set; } = null!;
+        public AppUser? User { get; set; } = null!;
     }
 }

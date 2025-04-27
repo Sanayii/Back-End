@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Sanayii.APIs.Controllers;
 using Sanayii.Core.Entities;
+using Sanayii.Repository;
+using Sanayii.Repository.Data;
 using Sanayii.Service.Hubs;
 
 
@@ -11,11 +14,19 @@ public class NotificationController : ControllerBase
 {
     private readonly IHubContext<NotificationHub> _hubContext;
     private readonly ILogger<ChatController> _logger;
-
-    public NotificationController(IHubContext<NotificationHub> hubContext, ILogger<ChatController> _logger)
+    private readonly SanayiiContext DB;
+   
+    public NotificationController(IHubContext<NotificationHub> hubContext, ILogger<ChatController> _logger,SanayiiContext DB)
     {
         _hubContext = hubContext;
         this._logger = _logger;
+        this.DB = DB;
+    }
+    [HttpGet]
+    public IActionResult Index()
+    {
+        var n = DB.Notifications.ToList();
+        return Ok(n);
     }
 
     [HttpPost("send")]
