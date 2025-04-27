@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Sanayii.APIs.Services;
 using Sanayii.Core;
-using Sanayii.Core.Entities;
 using Sanayii.Core.Repositories;
 using Sanayii.Repository;
 using Sanayii.Service.Mappers;
