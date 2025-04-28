@@ -11,20 +11,7 @@ namespace Sanayii.APIs.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // Identity Configuration
-            services.AddIdentity<AppUser, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Lockout.AllowedForNewUsers = true;
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.SignIn.RequireConfirmedEmail = true;
-            })
-            .AddEntityFrameworkStores<SanayiiContext>()
-            .AddDefaultTokenProviders();
+           
 
             services.Configure<DataProtectionTokenProviderOptions>(options =>
             {

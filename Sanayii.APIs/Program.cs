@@ -45,6 +45,20 @@ namespace Sanayii
             builder.Services.AddDbContext<SanayiiContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Identity Configuration
+            builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.SignIn.RequireConfirmedEmail = true;
+            })
+            .AddEntityFrameworkStores<SanayiiContext>()
+            .AddDefaultTokenProviders();
 
             // Identity Configuration
             builder.Services.AddIdentityServices(builder.Configuration);
@@ -57,8 +71,7 @@ namespace Sanayii
             builder.Services.AddHttpClient<IChatService, ChatService>()
                 .AddPolicyHandler(GetRetryPolicy());
 
-            // Register the chat service
-            builder.Services.AddScoped<IChatService, ChatService>();
+
 
             // Retry policy configuration
             static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()

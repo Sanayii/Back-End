@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Sanayii.Core.DTOs;
 using Sanayii.Core.DTOs.AccountDTOs;
 using Sanayii.Core.Entities;
 using System;
@@ -17,6 +18,8 @@ namespace Sanayii.Service.Mappers
             {
                 src.UserName = dst.Username;
             }).ReverseMap();
+            CreateMap<Review, ReviewDTO>().ReverseMap();
         }
     }
 }
+

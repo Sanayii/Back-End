@@ -23,6 +23,7 @@ namespace Sanayii.Repository.Data
 
             // Configure Identity Table Names (optional)
             modelBuilder.Entity<AppUser>().ToTable("Users");
+            modelBuilder.Entity<IdentityRole>().ToTable("Roles");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
