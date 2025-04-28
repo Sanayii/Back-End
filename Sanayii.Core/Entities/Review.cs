@@ -26,5 +26,7 @@ namespace Sanayii.Core.Entities
 
         public string Comment { get; set; }
         public bool isViolate { get; set; } = false;
+
+        public bool isReviewed { get; set; } = false;
     }
 }

@@ -20,8 +20,6 @@ namespace Sanayii.Repository.Data.Config
             builder.Property(V => V.Id)
                   .ValueGeneratedOnAdd();
 
-            builder.Property(V => V.Status)
-            .HasConversion<string>();
 
             builder.HasOne(v => v.Contract)
                   .WithMany(c => c.Violations)

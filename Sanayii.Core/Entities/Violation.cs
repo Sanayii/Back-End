@@ -10,7 +10,6 @@ namespace Sanayii.Core.Entities
     public class Violation : BaseEntity
     {
         public string Reason { get; set; }
-        public int Status { get; set; }
         public DateTime Date { get; set; }
 
         [ForeignKey("ContractId")]
