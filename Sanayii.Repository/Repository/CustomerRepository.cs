@@ -17,6 +17,10 @@ namespace Sanayii.Core.Repository
         {
             return db.Customers.FirstOrDefault(c => c.Id == id && c.IsDeleted == false);
         }
+	public void SaveChanges()
+        {
+            db.SaveChanges();
+        }
     }
     
 }
