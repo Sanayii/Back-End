@@ -14,6 +14,9 @@ using Sanayii.Service.Hubs;
 using Stripe;
 using Sanayii.Repository;
 using Sanayii.Core;
+using Microsoft.Extensions.DependencyInjection;
+using Polly.Extensions.Http;
+using Polly;
 namespace Sanayii
 {
     public class Program
@@ -50,33 +53,33 @@ namespace Sanayii
             builder.Services.AddApplicationServices();
 
             //Registeration for Api chat 
+            // Register HttpClient with retry policy for resilience
+            builder.Services.AddHttpClient<IChatService, ChatService>()
+                .AddPolicyHandler(GetRetryPolicy());
 
-            // ???? ??????:
-            //builder.Services.AddHttpClient<IChatService, ChatService>();
-            // Add to your services configuration
-            builder.Services.AddHttpClient<IChatService, ChatService>();
+            // Register the chat service
             builder.Services.AddScoped<IChatService, ChatService>();
-            builder.Services.AddSingleton(provider =>
-            {
-                var config = provider.GetRequiredService<IConfiguration>();
-                return new ChatService(
-                    provider.GetRequiredService<HttpClient>(),
-                    config,
-                    provider.GetRequiredService<ILogger<ChatService>>());
-            });
 
-            // CORS Configuration
+            // Retry policy configuration
+            static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+            {
+                return HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                    .WaitAndRetryAsync(3, retryAttempt =>
+                        TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            }
+            // Configure CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowSpecific",
-                policy =>
-                {
-                    policy.WithOrigins("http://localhost:4200") // Angular App URL
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials(); // Important for SignalR
-                });
-
+                options.AddPolicy("AllowSpecificOrigin",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:58184") // URL Angular app
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .AllowCredentials(); // Allow cookies, headers, etc.
+                    });
             });
 
             // Add SignalR services to the DI container
@@ -125,7 +128,7 @@ namespace Sanayii
             // Add this line before endpoints!
             app.UseRouting();
 
-            app.UseCors("AllowSpecific");
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthentication();
             app.UseAuthorization();

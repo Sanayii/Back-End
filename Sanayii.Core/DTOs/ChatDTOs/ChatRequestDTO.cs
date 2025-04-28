@@ -9,5 +9,6 @@ namespace Sanayii.Core.DTOs.ChatDTOs
     public class ChatRequestDTO
     {
         public string Message { get; set; }
+        
     }
 }
