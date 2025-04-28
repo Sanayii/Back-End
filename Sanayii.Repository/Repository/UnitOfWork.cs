@@ -22,10 +22,12 @@ namespace Sanayii.Repository.Repository
         GenericRepository<Service> ServiceRepo;
 
         GenericRepository<Payment> PaymentMethodsRepo;
-        GenericRepository<Payment> PaymentRepo;
+        PaymentRepository PaymentRepo;
 
         AdminRepository AdminRepo;
         ServiceRequestPaymentRepository serviceRequestPaymentRepo;
+        ServiceRequestPaymentRepo serviceRequestPaymentRepos;
+
         CustomerRepository CustomerRepo;
         ArtisanRepository ArtisanRepo;
 
@@ -33,12 +35,12 @@ namespace Sanayii.Repository.Repository
         GenericRepository<Violation> ViolationRepo;
 
 
-        GenericRepository<Discount> DiscountRepo;
         GenericRepository<CustomerDiscount> CustomerDiscountRepo;
 
         GenericRepository<Review> reviewRepo;
         GenericRepository<Notification> notificationRepo;
 
+        DiscountRepository DiscountRepo;
 
         public UnitOFWork(SanayiiContext db)
         {
@@ -83,13 +85,13 @@ namespace Sanayii.Repository.Repository
             }
         }
 
-        public GenericRepository<Payment> _PaymentRepo
+        public PaymentRepository _PaymentRepo
         {
             get
             {
                 if (PaymentRepo == null)
                 {
-                    PaymentRepo = new GenericRepository<Payment>(db);
+                    PaymentRepo = new PaymentRepository(db);
                 }
                 return PaymentRepo;
             }
@@ -115,6 +117,17 @@ namespace Sanayii.Repository.Repository
                     serviceRequestPaymentRepo = new ServiceRequestPaymentRepository(db);
                 }
                 return serviceRequestPaymentRepo;
+            }
+        }
+        public ServiceRequestPaymentRepo ServiceRequestPaymentRepos
+        {
+            get
+            {
+                if (serviceRequestPaymentRepos == null)
+                {
+                    serviceRequestPaymentRepos = new ServiceRequestPaymentRepo(db);
+                }
+                return serviceRequestPaymentRepos;
             }
         }
 
@@ -168,13 +181,13 @@ namespace Sanayii.Repository.Repository
             }
         }
 
-        public GenericRepository<Discount> _DiscountRepo
+        public DiscountRepository _DiscountRepo
         {
             get
             {
                 if (DiscountRepo == null)
                 {
-                    DiscountRepo = new GenericRepository<Discount>(db);
+                    DiscountRepo = new DiscountRepository(db);
                 }
                 return DiscountRepo;
             }

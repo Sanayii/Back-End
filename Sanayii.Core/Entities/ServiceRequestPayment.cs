@@ -26,8 +26,8 @@ namespace Sanayii.Core.Entities
         public Service Service { get; set; }
         public int ServiceId { get; set; }
 
-        [ForeignKey("ArtisanId")]
-        public Artisan Artisan { get; set; }
-        public string ArtisanId { get; set; }
+        //[ForeignKey("ArtisanId")]
+        //public Artisan Artisan { get; set; }
+        //public string ArtisanId { get; set; }
     }
 }
