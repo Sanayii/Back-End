@@ -22,6 +22,8 @@ namespace Sanayii.Repository.Data.Config
                 SRP.PaymentId,
                 SRP.ServiceId
             });
+            builder.Property(SRP => SRP.Status)
+             .HasConversion<int>();
         }
     }
 }
