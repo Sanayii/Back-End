@@ -26,6 +26,16 @@ namespace Sanayii.APIs.Controllers
             _unitOfWork = unitOfWork;
             _publishableKey = config["Stripe:PublishableKey"];
         }
+        [HttpGet("{id}")]
+        public IActionResult get(int id)
+        {
+            var payment = _unitOfWork._PaymentRepo.GetById(id);
+            if (payment == null)
+            {
+                return NotFound();
+            }
+            return Ok(payment);
+        }
 
         [HttpPost("create-session")]
         public async Task<ActionResult> CreateCheckoutSession([FromBody] CreateSessionRequest req)
@@ -73,6 +83,16 @@ namespace Sanayii.APIs.Controllers
             _unitOfWork.save();
 
             return Ok(new { sessionId = session.Id, publishableKey = _publishableKey, paymentId = payment.Id });
+        }
+        [HttpGet("CustomerPayments/{cutomerid}")]
+        public IActionResult GetCustomerPayments(string cutomerid)
+        {
+            var payments = _unitOfWork._PaymentRepo.GetPaymentsByCustomerId(cutomerid);
+            if (payments == null)
+            {
+                return NotFound();
+            }
+            return Ok(payments);
         }
     }
 

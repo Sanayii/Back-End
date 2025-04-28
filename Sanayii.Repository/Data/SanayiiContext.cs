@@ -42,8 +42,8 @@ namespace Sanayii.Repository.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<UserConnection> UserConnections { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-
-
+        public DbSet<Discount> Discount { get; set; }
+        public DbSet<CustomerDiscount> CustomerDiscounts { get; set; }
 
         public virtual DbSet<ServiceRequestPayment> ServiceRequestPayments { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }

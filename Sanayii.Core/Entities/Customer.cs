@@ -9,10 +9,9 @@ namespace Sanayii.Core.Entities
 {
     public class Customer : AppUser
     {
-        public Discount Discount { get; set; }
-        public ICollection<ServiceRequestPayment> ServiceRequestPayments { get; set; }
+        public ICollection<ServiceRequestPayment>? ServiceRequestPayments { get; set; }
 
-        public ICollection<Review> Reviews { get; set; }
-        public ICollection<CustomerDiscount> CustomerDiscounts { get; set; }
+        public ICollection<Review>? Reviews { get; set; }
+        public ICollection<CustomerDiscount>? CustomerDiscounts { get; set; }
     }
 }
