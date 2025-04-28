@@ -22,29 +22,38 @@ namespace Sanayii.APIs.Controllers
             }
             return Ok(customer);
         }
-        [HttpPost]
-        public IActionResult Edit(Customer customer)
+        [HttpPut("{id}")]
+        public IActionResult UpdateCustomer(string id, EditCustomerDTO dTO)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (id != dTO.Id)
+                {
+                    return BadRequest("Customer ID mismatch.");
+                }
+                var existingCustomer = _unitOfWork._CustomerRepo.GetCustomerById(id);
+                if (existingCustomer == null)
+                {
+                    return NotFound("Customer not found.");
+                }
+                existingCustomer.FName = dTO.FName;
+                existingCustomer.LName = dTO.LName;
+                existingCustomer.Age = dTO.Age;
+                existingCustomer.City = dTO.City;
+                existingCustomer.Street = dTO.Street;
+                existingCustomer.Government = dTO.Government;
+                existingCustomer.Email = dTO.Email;
+                existingCustomer.PhoneNumber = dTO.PhoneNumber;
 
-            var existingCustomer = _unitOfWork._CustomerRepo.GetById(customer.Id);
-            if (existingCustomer == null)
-                return NotFound();
+                _unitOfWork._CustomerRepo.Edit(existingCustomer);
+                _unitOfWork._CustomerRepo.SaveChanges();
+                return Ok("Customer updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
 
-            existingCustomer.FName = customer.FName;
-            existingCustomer.LName = customer.LName;
-            existingCustomer.Age = customer.Age;
-            existingCustomer.Email = customer.Email;
-            existingCustomer.City = customer.City;
-            existingCustomer.Street = customer.Street;
-            existingCustomer.Government = customer.Government;
-            existingCustomer.UserPhones.Clear();
-            existingCustomer.UserPhones = customer.UserPhones;
-
-            _unitOfWork.save();
-
-            return Ok(existingCustomer);
+            }
         }
     }
 }
