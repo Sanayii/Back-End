@@ -8,7 +8,8 @@ namespace Sanayii.Core.DTOs.PaymentDTOs
 {
     public  class CreateSessionRequest
     {
-        public decimal Amount { get; set; }
+        public int PaymentId { get; set; }
+        public int Amount { get; set; }
         public string ProductName { get; set; }
         public string SuccessUrl { get; set; }
         public string CancelUrl { get; set; }

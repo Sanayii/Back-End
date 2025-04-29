@@ -38,7 +38,7 @@ namespace Sanayii.Repository.Repository
         GenericRepository<CustomerDiscount> CustomerDiscountRepo;
 
         GenericRepository<Review> reviewRepo;
-        GenericRepository<Notification> notificationRepo;
+        NotificationRepository notificationRepo;
 
         DiscountRepository DiscountRepo;
 
@@ -217,13 +217,13 @@ namespace Sanayii.Repository.Repository
                 return reviewRepo;
             }
         }
-        public GenericRepository<Notification> _NotificationRepo
+        public NotificationRepository _NotificationRepo
         {
             get
             {
                 if (notificationRepo == null)
                 {
-                    notificationRepo = new GenericRepository<Notification>(db);
+                    notificationRepo = new NotificationRepository(db);
                 }
                 return notificationRepo;
             }
@@ -231,6 +231,10 @@ namespace Sanayii.Repository.Repository
         public void save()
         {
             db.SaveChanges();
+        }
+        public async Task SaveAsync()
+        {
+            await db.SaveChangesAsync();
         }
     }
 }

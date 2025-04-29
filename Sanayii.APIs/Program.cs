@@ -55,7 +55,7 @@ namespace Sanayii
                 options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
             })
             .AddEntityFrameworkStores<SanayiiContext>()
             .AddDefaultTokenProviders();

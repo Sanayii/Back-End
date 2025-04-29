@@ -9,7 +9,7 @@ namespace Sanayii.Core.Entities
 {
     public class Artisan : AppUser
     {
-        public int NationalityId { get; set; }
+        public string NationalityId { get; set; }
         public int Rating { get; set; }
         public Contract Contract { get; set; }
         public Category Category { get; set; }

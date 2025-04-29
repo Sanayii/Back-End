@@ -63,11 +63,11 @@ namespace Sanayii.Controllers
                 return BadRequest("Invalid username or password");
             }
 
-            // Check if email is confirmed (if required)
-            if (!user.EmailConfirmed)
-            {
-                return BadRequest("Email is not confirmed. Please check your inbox.");
-            }
+            //// Check if email is confirmed (if required)
+            //if (!user.EmailConfirmed)
+            //{
+            //    return BadRequest("Email is not confirmed. Please check your inbox.");
+            //}
 
             // Check password
             var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -144,7 +144,23 @@ namespace Sanayii.Controllers
 
                         await db.SaveChangesAsync();
                     }
-                    return Ok("Registered Successfully");
+                    // Generate JWT Token
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"); // Use a secure key
+
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new[]
+                        {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email)
+            }),
+                        Expires = DateTime.UtcNow.AddHours(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    return Ok(new { token = tokenHandler.WriteToken(token) });
                 }
                 else
                 {

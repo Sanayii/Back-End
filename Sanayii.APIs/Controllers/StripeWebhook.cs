@@ -53,7 +53,7 @@ namespace Sanayii.APIs.Controllers
                     {
                         if (int.TryParse(paymentIntent.Metadata["PaymentId"], out int paymentId))
                         {
-                            var payment =  _unitOfWork._PaymentRepo.GetById(paymentId);
+                            var payment = _unitOfWork._PaymentRepo.GetById(paymentId);
                             if (payment != null)
                             {
                                 payment.Status = PaymentStatus.Completed;
@@ -100,7 +100,7 @@ namespace Sanayii.APIs.Controllers
                     }
                 }
 
-                return Ok(); 
+                return Ok();
             }
             catch (Exception ex)
             {

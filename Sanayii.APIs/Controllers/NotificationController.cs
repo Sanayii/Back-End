@@ -5,6 +5,7 @@ using Sanayii.APIs.Controllers;
 using Sanayii.Core.Entities;
 using Sanayii.Repository;
 using Sanayii.Repository.Data;
+using Sanayii.Repository.Repository;
 using Sanayii.Service.Hubs;
 
 
@@ -14,21 +15,35 @@ public class NotificationController : ControllerBase
 {
     private readonly IHubContext<NotificationHub> _hubContext;
     private readonly ILogger<ChatController> _logger;
-    private readonly SanayiiContext DB;
+    private readonly UnitOFWork unitOFWork;
    
-    public NotificationController(IHubContext<NotificationHub> hubContext, ILogger<ChatController> _logger,SanayiiContext DB)
+    public NotificationController(IHubContext<NotificationHub> hubContext, ILogger<ChatController> _logger,SanayiiContext DB, UnitOFWork unitOFWork)
     {
         _hubContext = hubContext;
         this._logger = _logger;
-        this.DB = DB;
+        this.unitOFWork = unitOFWork;
     }
-    [HttpGet]
-    public IActionResult Index()
+    [HttpGet("{customerid}")]
+    public IActionResult Index(string customerid)
     {
-        var n = DB.Notifications.ToList();
+        var n = unitOFWork._NotificationRepo.getCustomerNotification(customerid);
         return Ok(n);
     }
+    [HttpGet("/MarkAsRead/{customerid}")]
+    public IActionResult MarkasRead(string customerid)
+    {
+        unitOFWork._NotificationRepo.MarkAsRead(customerid);
+        unitOFWork.save();
+        return Ok("Marked as Read successfully");
+    }
+    [HttpDelete("/DeleteCustomerNotification/{customerid}")]
+    public IActionResult DeleteCustomerNotification(string customerid)
+    {
+        unitOFWork._NotificationRepo.DeleteCustomerNotification(customerid);
+        unitOFWork.save();
 
+        return Ok("Deleted successfully");
+    }
     [HttpPost("send")]
     public async Task<IActionResult> SendNotification([FromBody] Notification notification)
     {

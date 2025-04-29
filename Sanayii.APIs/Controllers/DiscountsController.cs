@@ -13,7 +13,7 @@ namespace Sanayii.APIs.Controllers
         {
             _unitOfWork = unitOFWork;
         }
-        [HttpGet("CustomerDiscounts")]
+        [HttpGet("{id}")]
         public IActionResult GetCustomerDiscounts(string customerid)
         {
             var res = _unitOfWork._DiscountRepo.GetCustomerDiscounts(customerid);

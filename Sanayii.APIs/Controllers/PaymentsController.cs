@@ -19,22 +19,12 @@ namespace Sanayii.APIs.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        private readonly UnitOFWork _unitOfWork ;
+        private readonly UnitOFWork _unitOfWork;
         private readonly string _publishableKey;
-        public PaymentsController(IConfiguration config,UnitOFWork unitOfWork)
+        public PaymentsController(IConfiguration config, UnitOFWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _publishableKey = config["Stripe:PublishableKey"];
-        }
-        [HttpGet("{id}")]
-        public IActionResult get(int id)
-        {
-            var payment = _unitOfWork._PaymentRepo.GetById(id);
-            if (payment == null)
-            {
-                return NotFound();
-            }
-            return Ok(payment);
         }
 
         [HttpPost("create-session")]
@@ -62,37 +52,21 @@ namespace Sanayii.APIs.Controllers
             };
             var service = new SessionService();
             Session session = service.Create(options);
-            var payment = new Payment
-            {
-                Status = PaymentStatus.Pending,
-                Amount = (int)(req.Amount * 100),
-                Method = PaymentMethods.CreditCard
-            };
-            _unitOfWork._PaymentRepo.Add(payment);
-            _unitOfWork.save();
-            var srp = new ServiceRequestPayment
-            {
-                CustomerId = req.CustomerId,
-                ServiceId = req.ServiceId,
-                PaymentId = payment.Id,
-                CreatedAt = DateTime.UtcNow,
-                ExecutionTime = 0,
-                Status = ServiceStatus.Pending
-            };
-            _unitOfWork._ServiceRequestPaymentRepo.AddAsync(srp);
-            _unitOfWork.save();
-
-            return Ok(new { sessionId = session.Id, publishableKey = _publishableKey, paymentId = payment.Id });
+            var payment = _unitOfWork._PaymentRepo.GetById(req.PaymentId);
+            if (payment == null)
+                return NotFound("Payment  not found");
+            payment.Status = PaymentStatus.Completed;
+            payment.Amount = req.Amount;
+            return Ok(new { sessionId = session.Id, publishableKey = _publishableKey, paymentId = req.PaymentId });
         }
-        [HttpGet("CustomerPayments/{cutomerid}")]
-        public IActionResult GetCustomerPayments(string cutomerid)
+        [HttpGet("getPrice/{id}")]
+        public ActionResult GetPrice(int id)
         {
-            var payments = _unitOfWork._PaymentRepo.GetPaymentsByCustomerId(cutomerid);
-            if (payments == null)
-            {
-                return NotFound();
-            }
-            return Ok(payments);
+            var service = _unitOfWork._ServiceRepo.GetById(id);
+            if (service == null)
+                return NotFound("Service not found");
+            var price = service.BasePrice + service.AdditionalPrice;
+            return Ok(price);
         }
     }
 

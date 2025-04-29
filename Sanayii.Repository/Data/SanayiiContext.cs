@@ -45,6 +45,8 @@ namespace Sanayii.Repository.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Discount> Discount { get; set; }
         public DbSet<CustomerDiscount> CustomerDiscounts { get; set; }
+        public DbSet<Review> Review { get; set; }
+        public DbSet<UserPhones> UserPhones { get; set; }
 
         public virtual DbSet<ServiceRequestPayment> ServiceRequestPayments { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
