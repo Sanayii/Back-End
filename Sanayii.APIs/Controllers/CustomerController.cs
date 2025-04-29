@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sanayii.Core.DTOs.CustomerDTOs;
 using Sanayii.Core.Entities;
 using Sanayii.Repository.Repository;
 

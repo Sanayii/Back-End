@@ -3,7 +3,7 @@ using Sanayii.Repository;
 using Sanayii.Repository.Data;
 namespace Sanayii.Core.Repository
 {
-    public class CustomerRepository:GenericRepository<Customer>
+    public class CustomerRepository : GenericRepository<Customer>
     {
         public CustomerRepository(SanayiiContext db) : base(db)
         {
@@ -17,10 +17,10 @@ namespace Sanayii.Core.Repository
         {
             return db.Customers.FirstOrDefault(c => c.Id == id && c.IsDeleted == false);
         }
-	public void SaveChanges()
+        public void SaveChanges()
         {
             db.SaveChanges();
         }
     }
-    
+
 }
