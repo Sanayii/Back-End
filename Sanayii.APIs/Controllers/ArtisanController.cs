@@ -14,80 +14,36 @@ namespace Sanayii.APIs.Controllers
     [ApiController]
     public class ArtisanController : ControllerBase
     {
-        private readonly SanayiiContext _dbContext;
-
-
-        public ArtisanController(SanayiiContext dbContext)
+        private readonly UnitOFWork _unitOfWork;
+        public ArtisanController(UnitOFWork unitOfWork)
         {
-           this._dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
-
-        [HttpGet("getServiceRequest/{id}")]
-        public async Task<IActionResult> GetArtisanService(string id)
-        {
-
-            var allServicesRequests = await _dbContext.ServiceRequestPayments
-                .Where(s => s.ArtisanId == id)
-                .Include(s => s.Service)        
-                .Include(s => s.Customer)            
-                .ToListAsync();
-
-            if (allServicesRequests == null)
-            {
-                return NotFound("No service requests found for this artisan.");
-            }
-
-            var allServicesDtos = new List<ArtisanServiceRequestDto>();
-
-            for (int i = 0; i < allServicesRequests.Count; i++)
-            {
-                var dto = new ArtisanServiceRequestDto
-                {
-                    CreatedAt = allServicesRequests[i].CreatedAt,
-                    ExecutionTime = allServicesRequests[i].ExecutionTime,
-                    Status =( (ServiceStatus)allServicesRequests[i].Status).ToString(),
-                    ServiceName = allServicesRequests[i].Service?.ServiceName,   
-                    CustomerName = allServicesRequests[i].Customer?.FName+" " + allServicesRequests[i].Customer?.LName,     
-                };
-
-                var rate = _dbContext.Review.Where(s=> s.ServiceId == allServicesRequests[i].ServiceId &&
-                s.CustomerId == allServicesRequests[i].CustomerId && s.ArtisanId == id).Select(s => s.Rating).FirstOrDefault();
-
-                dto.rating = rate;
-                allServicesDtos.Add(dto);
-            }
-
-            return Ok(allServicesDtos);
-        }
-
-
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetArtisanById(string id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult Get(string id)
         {
-            var artisan = await _dbContext.Artisans
-        .Include(a => a.UserPhones)  
-        .FirstOrDefaultAsync(a => a.Id == id); 
-
-            
-            if (artisan == null)
-                return NotFound();
-
-            var dto = new ArtisanDTO
+            try
             {
-                Id = artisan.Id,
-                Rating = artisan.Rating,
-                FName = artisan.FName,
-                LName = artisan.LName,
-                City = artisan.City,
-                Street = artisan.Street,
-                Government = artisan.Government,
-                UserName = artisan.UserName,
-                Email = artisan.Email
-            };
-            var phones = _dbContext.UserPhones.Where(p => p.UserId == id).Select(s => s.PhoneNumber).ToList();
-            dto.UserPhones = phones;
-            
-            return Ok(dto);
+                var artisan = _unitOfWork._ArtisanRepo.GetArtisanById(id);
+                if (artisan == null)
+                {
+                    return NotFound();
+                }
+
+                // Option 1: Return full name
+                return Ok($"{artisan.FName} {artisan.LName}");
+
+                // Option 2: Return a DTO
+                // return Ok(new ArtisanDto { FullName = $"{artisan.FName} {artisan.LName}" });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
 
     }
