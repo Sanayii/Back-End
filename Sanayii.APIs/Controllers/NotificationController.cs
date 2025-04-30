@@ -23,6 +23,12 @@ public class NotificationController : ControllerBase
         this._logger = _logger;
         this.unitOFWork = unitOFWork;
     }
+    [HttpGet]
+    public IActionResult Index()
+    {
+        var n = unitOFWork._NotificationRepo.GetAll();
+        return Ok(n);
+    }
     [HttpGet("{customerid}")]
     public IActionResult Index(string customerid)
     {

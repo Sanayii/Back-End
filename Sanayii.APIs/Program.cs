@@ -88,7 +88,7 @@ namespace Sanayii
                 options.AddPolicy("AllowSpecificOrigin",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:58184") // URL Angular app
+                        policy.WithOrigins("http://localhost:4200") // URL Angular app
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials(); // Allow cookies, headers, etc.

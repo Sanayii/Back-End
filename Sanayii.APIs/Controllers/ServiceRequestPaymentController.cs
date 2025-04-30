@@ -45,9 +45,10 @@ namespace Sanayii.APIs.Controllers
          var payments = await _unitOfWork.ServiceRequestPaymentRepos.GetByServiceAsync(serviceId);
          return Ok(payments);
      }
+        
 
-     // GET: api/ServiceRequestPayments/by-status/{status}
-     [HttpGet("by-status/{status}")]
+        // GET: api/ServiceRequestPayments/by-status/{status}
+        [HttpGet("by-status/{status}")]
      public async Task<ActionResult<IEnumerable<ServiceRequestPayment>>> GetByStatus(ServiceStatus status)
      {
          var payments = await _unitOfWork.ServiceRequestPaymentRepos.GetByStatusAsync(status);

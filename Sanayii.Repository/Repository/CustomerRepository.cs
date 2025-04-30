@@ -9,9 +9,9 @@ namespace Sanayii.Core.Repository
         {
         }
 
-        public List<Customer> GetAllCustomers()
+        public IQueryable<Customer> GetAllCustomers()
         {
-            return db.Customers.Where(c => c.IsDeleted == false).ToList();
+            return db.Customers.Where(c => c.IsDeleted == false);
         }
         public Customer GetCustomerById(string id)
         {

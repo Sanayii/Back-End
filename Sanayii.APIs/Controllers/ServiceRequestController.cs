@@ -17,7 +17,7 @@ namespace Sanayii.APIs.Controllers
     {
         private UnitOFWork _unitOfWork;
         private SanayiiContext db;
-        public ServiceRequestController(UnitOFWork unitOFWork,SanayiiContext sanayiiContext)
+        public ServiceRequestController(UnitOFWork unitOFWork, SanayiiContext sanayiiContext)
         {
             db = sanayiiContext;
             _unitOfWork = unitOFWork;
@@ -62,7 +62,7 @@ namespace Sanayii.APIs.Controllers
             {
                 CustomerId = viewModel.CustomerId,
                 ServiceId = service.Id,
-                ArtisanId = null,  
+                ArtisanId = null,
                 PaymentId = payment.Id,
                 CreatedAt = viewModel.RequestDate,
                 ExecutionTime = 0,
@@ -97,7 +97,7 @@ namespace Sanayii.APIs.Controllers
                 CustomerCity = customer.City,
                 CustomerGovernment = customer.Government,
                 CustomerStreet = customer.Street,
-                CustomerPhoneNumbers = customer?.UserPhones?.Select(up => up.PhoneNumber).ToList()?? new List<string>(),
+                CustomerPhoneNumbers = customer?.UserPhones?.Select(up => up.PhoneNumber).ToList() ?? new List<string>(),
                 artisanId = artisan.Id,
                 ArtisanName = artisan.UserName
             };
@@ -118,13 +118,13 @@ namespace Sanayii.APIs.Controllers
             // Retrieve artisan ids who are assigned to a pending or in-progress service request
             var busyArtisanIds = db.ServiceRequestPayments
                 .Where(s => s.ArtisanId != null && (s.Status == ServiceStatus.Pending || s.Status == ServiceStatus.InProgress))
-                .Select(s => s.ArtisanId ?? string.Empty)  
-                .Where(id => !string.IsNullOrEmpty(id))     
+                .Select(s => s.ArtisanId ?? string.Empty)
+                .Where(id => !string.IsNullOrEmpty(id))
                 .Distinct()
                 .ToList();
 
             // Filter out busy artisans, ensure to convert a.Id to string for comparison
-            var availableArtisans = artisans.Where(a => !busyArtisanIds.Contains(a.Id.ToString())).ToList();  
+            var availableArtisans = artisans.Where(a => !busyArtisanIds.Contains(a.Id.ToString())).ToList();
 
             // If no available artisans, return null
             if (!availableArtisans.Any())
