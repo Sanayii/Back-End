@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Sanayii.Core.DTOs.ArtisanDTOS;
 using Sanayii.Core.DTOs.CustomerDTOs;
 using Sanayii.Core.Entities;
+using Sanayii.Enums;
+using Sanayii.Repository.Data;
 using Sanayii.Repository.Repository;
 
 namespace Sanayii.APIs.Controllers
@@ -10,7 +14,9 @@ namespace Sanayii.APIs.Controllers
     public class CustomerController : Controller
     {
         private readonly UnitOFWork _unitOfWork;
-        public CustomerController(UnitOFWork unitOFWork) {
+        private readonly SanayiiContext _dbContext;
+        public CustomerController(UnitOFWork unitOFWork, SanayiiContext dbContext) {
+            _dbContext = dbContext;
             _unitOfWork = unitOFWork;
         }
         [HttpGet("{customerid}")]
@@ -56,5 +62,36 @@ namespace Sanayii.APIs.Controllers
 
             }
         }
+        [HttpGet("getServiceRequest/{id}")]
+        public async Task<IActionResult> GetCustomerServiceRequests(string id)
+        {
+            var allServicesRequests = await _dbContext.ServiceRequestPayments
+                .Where(s => s.CustomerId == id)
+                .Include(s => s.Service)
+                .Include(s => s.Artisan)
+                .Include(s => s.Payment) // ✅ include Payment
+                .ToListAsync();
+
+            if (allServicesRequests == null || !allServicesRequests.Any())
+            {
+                return NotFound("No service requests found for this customer.");
+            }
+
+            var allServicesDtos = allServicesRequests.Select(s => new CustomerServiceRequestDto
+            {
+                CreatedAt = s.CreatedAt,
+                ExecutionTime = s.ExecutionTime,
+                Status = (int)s.Status,
+                PaymentMethod = s.Payment != null ? (int)s.Payment.Method : 0,       // default 0 = Unknown
+                PaymentAmount = s.Payment?.Amount ?? 0,
+                ServiceName = s.Service?.ServiceName ?? "Unknown",
+                ArtisanName = s.Artisan != null ? $"{s.Artisan.FName} {s.Artisan.LName}" : "Not assigned"
+            }).ToList();
+
+            return Ok(allServicesDtos);
+        }
+
+
+
     }
 }
