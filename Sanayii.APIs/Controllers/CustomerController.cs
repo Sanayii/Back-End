@@ -60,11 +60,10 @@ namespace Sanayii.APIs.Controllers
                 Street = customer.Street,
                 Government = customer.Government,
                 Email = customer.Email,
-                UserPhones = customer.UserPhones.Select(p => new UserPhoneDTO
-                {
-                    PhoneNumber = p.PhoneNumber
-                }).ToList()
+                
             };
+            var phones = _dbContext.UserPhones.Where(p => p.UserId == customerid).Select(s => s.PhoneNumber).ToList();
+            customerDto.phoneNumber = phones;
 
             return Ok(customerDto);
         }
