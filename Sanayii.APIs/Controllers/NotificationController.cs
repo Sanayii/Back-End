@@ -35,20 +35,42 @@ public class NotificationController : ControllerBase
         var n = unitOFWork._NotificationRepo.getCustomerNotification(customerid);
         return Ok(n);
     }
-    [HttpGet("/MarkAsRead/{customerid}")]
+    [HttpGet("MarkAsRead/{customerid}")]
     public IActionResult MarkasRead(string customerid)
     {
         unitOFWork._NotificationRepo.MarkAsRead(customerid);
         unitOFWork.save();
-        return Ok("Marked as Read successfully");
+        return Ok(new { message = "All Notifications Marked as Read successfully" });
     }
-    [HttpDelete("/DeleteCustomerNotification/{customerid}")]
+    [HttpGet("MarkNotification")]
+    public IActionResult MarkNotification(string customerid,int id)
+    {
+        var notfication = unitOFWork._NotificationRepo.GetById(id);
+        if (notfication.Id != id)
+            return BadRequest();
+
+        unitOFWork._NotificationRepo.MarkNotification(id);
+        unitOFWork.save();
+        return Ok(new { message = "Notification Marked as Read successfully" });
+    }
+    [HttpDelete("DeleteCustomerNotification/{customerid}")]
     public IActionResult DeleteCustomerNotification(string customerid)
     {
         unitOFWork._NotificationRepo.DeleteCustomerNotification(customerid);
         unitOFWork.save();
 
-        return Ok("Deleted successfully");
+        return Ok(new { message = "All Notifications Deleted successfully" });
+    }
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var notfication = unitOFWork._NotificationRepo.GetById(id);
+        if (notfication == null)
+            return BadRequest();
+
+        unitOFWork._NotificationRepo.Delete(id);
+        unitOFWork.save();
+        return Ok(new { message = "Notification Deleted successfully" });
     }
     [HttpPost("send")]
     public async Task<IActionResult> SendNotification([FromBody] Notification notification)
