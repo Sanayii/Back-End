@@ -17,10 +17,7 @@ namespace Sanayii.Core.DTOs.CustomerDTOs
         public string Street { get; set; }
         public string Government { get; set; }
         public string Email { get; set; }
-        public List<UserPhoneDTO> UserPhones { get; set; }
+        public List<string> phoneNumber { get; set; } = new List<string>();
     }
-    public class UserPhoneDTO
-    {
-        public string PhoneNumber { get; set; }
-    }
+    
 }
