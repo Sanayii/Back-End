@@ -182,10 +182,12 @@ namespace Sanayii.Controllers
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
-
         [HttpGet("ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
         {
+            // إضافة تعطيل Claim Mapping
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -193,39 +195,35 @@ namespace Sanayii.Controllers
             }
 
             var user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
             if (user == null)
             {
-                // Create a new user if they do not exist
-                user = new AppUser
-                {
-                    UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                    Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                    FName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
-                    LName = info.Principal.FindFirstValue(ClaimTypes.Surname),
-                    City = "Unknown",
-                    Street = "Unknown",
-                    Government = "Unknown"
-                };
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                user = await userManager.FindByEmailAsync(email);
 
-                var result = await userManager.CreateAsync(user);
-                if (!result.Succeeded)
+                if (user == null)
                 {
-                    return BadRequest("User creation failed.");
+                    return BadRequest("Email not registered.");
                 }
-
-                await userManager.AddLoginAsync(user, info);
+            }
+            else
+            {
+                var emailFromJwt = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (user.Email != emailFromJwt)
+                {
+                    return BadRequest("Email mismatch between database and JWT.");
+                }
             }
 
             await signInManager.SignInAsync(user, isPersistent: false);
 
-            // Generate JWT Token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"); // Use a secure key
+            var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%");
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] {
-            new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.Id),
             new Claim(ClaimTypes.Name, user.UserName),
             new Claim(ClaimTypes.Email, user.Email)
         }),
@@ -235,9 +233,14 @@ namespace Sanayii.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = tokenHandler.WriteToken(token);
 
-            // Redirect to frontend with token in the URL
             var frontendUrl = $"http://localhost:4200/login?token={jwtToken}";
-            return Redirect(frontendUrl); // Redirect to Angular frontend
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                frontendUrl = $"{frontendUrl}&returnUrl={Uri.EscapeDataString(returnUrl)}";
+            }
+
+            return Redirect(frontendUrl);
         }
 
         private async Task SendConfirmationEmail(AppUser user)
