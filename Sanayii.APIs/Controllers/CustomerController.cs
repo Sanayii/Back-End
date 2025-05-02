@@ -19,16 +19,56 @@ namespace Sanayii.APIs.Controllers
             _dbContext = dbContext;
             _unitOfWork = unitOFWork;
         }
+        //[HttpGet("{customerid}")]
+        //public IActionResult Get(string customerid)
+        //{
+        //    var customer = _unitOfWork._CustomerRepo.GetById(customerid);
+        //    if (customer == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(customer);
+        //}
         [HttpGet("{customerid}")]
         public IActionResult Get(string customerid)
         {
             var customer = _unitOfWork._CustomerRepo.GetById(customerid);
+
+
             if (customer == null)
             {
                 return NotFound();
             }
-            return Ok(customer);
+            Console.WriteLine($"UserPhones is null: {customer.UserPhones == null}");
+            Console.WriteLine($"UserPhones count: {customer.UserPhones?.Count ?? 0}");
+            if (customer.UserPhones != null)
+            {
+                foreach (var phone in customer.UserPhones)
+                {
+                    Console.WriteLine($"Phone: {phone.PhoneNumber}");
+                }
+            }
+
+            var customerDto = new CustomerDTO
+            {
+                Id = customer.Id,
+                FName = customer.FName,
+                LName = customer.LName,
+                userName = customer.UserName,
+                Age = customer.Age,
+                City = customer.City,
+                Street = customer.Street,
+                Government = customer.Government,
+                Email = customer.Email,
+                UserPhones = customer.UserPhones.Select(p => new UserPhoneDTO
+                {
+                    PhoneNumber = p.PhoneNumber
+                }).ToList()
+            };
+
+            return Ok(customerDto);
         }
+
         [HttpPut("{id}")]
         public IActionResult UpdateCustomer(string id, EditCustomerDTO dTO)
         {
@@ -50,7 +90,24 @@ namespace Sanayii.APIs.Controllers
                 existingCustomer.Street = dTO.Street;
                 existingCustomer.Government = dTO.Government;
                 existingCustomer.Email = dTO.Email;
-                existingCustomer.PhoneNumber = dTO.PhoneNumber;
+                //existingCustomer.UserPhones = dTO.PhoneNumber
+                //    .Select(phone => new UserPhones { PhoneNumber = phone })
+                //    .ToList();
+                existingCustomer.UserPhones?.Clear();
+
+                // Add new phone numbers
+                if (dTO.PhoneNumber != null)
+                {
+                    foreach (var phone in dTO.PhoneNumber)
+                    {
+                        existingCustomer.UserPhones.Add(new UserPhones
+                        {
+                            PhoneNumber = phone,
+                            UserId = existingCustomer.Id
+                        });
+                    }
+                }
+
 
                 _unitOfWork._CustomerRepo.Edit(existingCustomer);
                 _unitOfWork._CustomerRepo.SaveChanges();

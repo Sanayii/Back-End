@@ -1,4 +1,5 @@
-﻿using Sanayii.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Sanayii.Core.Entities;
 using Sanayii.Repository;
 using Sanayii.Repository.Data;
 namespace Sanayii.Core.Repository
@@ -15,7 +16,9 @@ namespace Sanayii.Core.Repository
         }
         public Customer GetCustomerById(string id)
         {
-            return db.Customers.FirstOrDefault(c => c.Id == id && c.IsDeleted == false);
+            return db.Customers
+                .Include(c=>c.UserPhones)
+                .FirstOrDefault(c => c.Id == id && c.IsDeleted == false);
         }
         public void SaveChanges()
         {

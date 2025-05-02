@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace Sanayii.Core.DTOs.CustomerDTOs
 {
-    public class EditCustomerDTO
+    public class CustomerDTO
     {
         public string Id { get; set; }
         public string FName { get; set; }
         public string LName { get; set; }
+        public string userName {  get; set; }
         public int Age { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string Government { get; set; }
         public string Email { get; set; }
-        public List<string> PhoneNumber { get; set; }
+        public List<UserPhoneDTO> UserPhones { get; set; }
+    }
+    public class UserPhoneDTO
+    {
+        public string PhoneNumber { get; set; }
     }
 }
