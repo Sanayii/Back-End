@@ -17,6 +17,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using UAParser;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sanayii.Controllers
 {
@@ -63,11 +64,11 @@ namespace Sanayii.Controllers
                 return BadRequest("Invalid username or password");
             }
 
-            //// Check if email is confirmed (if required)
-            //if (!user.EmailConfirmed)
-            //{
-            //    return BadRequest("Email is not confirmed. Please check your inbox.");
-            //}
+            // Check if email is confirmed (if required)
+            if (!user.EmailConfirmed)
+            {
+                return BadRequest("Email is not confirmed. Please check your inbox.");
+            }
 
             // Check password
             var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -100,7 +101,7 @@ namespace Sanayii.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "http://localhost:5127/",
+                issuer: "http://localhost:7234/",
                 audience: "http://localhost:4200/",
                 expires: DateTime.UtcNow.AddHours(1),
                 claims: userClaims,
@@ -144,6 +145,7 @@ namespace Sanayii.Controllers
 
                         await db.SaveChangesAsync();
                     }
+                    await SendConfirmationEmail(user);
                     // Generate JWT Token
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"); // Use a secure key
@@ -180,10 +182,12 @@ namespace Sanayii.Controllers
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
-
         [HttpGet("ExternalLoginCallback")]
-        public async Task<IActionResult> ExternalLoginCallback()
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
         {
+            // إضافة تعطيل Claim Mapping
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -191,49 +195,54 @@ namespace Sanayii.Controllers
             }
 
             var user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
             if (user == null)
             {
-                // Create a new user if they do not exist
-                user = new AppUser
-                {
-                    UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                    Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                    FName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
-                    LName = info.Principal.FindFirstValue(ClaimTypes.Surname),
-                    City = "Unknown",
-                    Street = "Unknown",
-                    Government = "Unknown"
-                };
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                user = await userManager.FindByEmailAsync(email);
 
-                var result = await userManager.CreateAsync(user);
-                if (!result.Succeeded)
+                if (user == null)
                 {
-                    return BadRequest("User creation failed.");
+                    return BadRequest("Email not registered.");
                 }
-
-                await userManager.AddLoginAsync(user, info);
+            }
+            else
+            {
+                var emailFromJwt = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (user.Email != emailFromJwt)
+                {
+                    return BadRequest("Email mismatch between database and JWT.");
+                }
             }
 
             await signInManager.SignInAsync(user, isPersistent: false);
 
-            // Generate JWT Token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%"); // Use a secure key
+            var key = Encoding.UTF8.GetBytes("L6scvGt8D3yU5vAqZt9PfMxW2jNkRgT7!@#$%");
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
-            }),
+                Subject = new ClaimsIdentity(new[] {
+                new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", user.Id),
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Email, user.Email)
+        }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(new { token = tokenHandler.WriteToken(token) });
+            var jwtToken = tokenHandler.WriteToken(token);
+
+            var frontendUrl = $"http://localhost:4200/login?token={jwtToken}";
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                frontendUrl = $"{frontendUrl}&returnUrl={Uri.EscapeDataString(returnUrl)}";
+            }
+
+            return Redirect(frontendUrl);
         }
+
         private async Task SendConfirmationEmail(AppUser user)
         {
             var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -242,29 +251,32 @@ namespace Sanayii.Controllers
             var tokenBytes = System.Text.Encoding.UTF8.GetBytes(token);
             var encodedToken = WebUtility.UrlEncode(Convert.ToBase64String(tokenBytes));
 
-            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Account/ConfirmEmail?userId={user.Id}&token={encodedToken}";
+            // بدل ما تبني اللينك على Request.Host (الـ API)، حط لينك الواجهة (Angular)
+            var angularClientUrl = "http://localhost:4200"; // ✨ أو تحط URL بتاع Angular بتاعك لو مستضيفه
+            var confirmationLink = $"{angularClientUrl}/confirm-email-register?userId={user.Id}&token={encodedToken}";
 
             var subject = "Confirm Your Email - Sanayii";
             var messageBody = $@"
-                    <div style=""font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#333;"">
-                        <p>Hi {user.FName} {user.LName},</p>
-                        <p>Thank you for registering with <strong>Sanayii</strong>. Please confirm your email by clicking the button below:</p>
-                        <p>
-                            <a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" 
-                               style=""background-color:#007bff;color:#fff;padding:10px 20px;text-decoration:none;
-                                      font-weight:bold;border-radius:5px;display:inline-block;"">
-                                Confirm Email
-                            </a>
-                        </p>
-                        <p>If the button doesn’t work, copy and paste this URL into your browser:</p>
-                        <p><a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" style=""color:#007bff;text-decoration:none;"">{HtmlEncoder.Default.Encode(confirmationLink)}</a></p>
-                        <p>If you did not sign up for this account, please ignore this email.</p>
-                        <p>Best Regards,<br />The Sanayii Team</p>
-                    </div>
-                ";
+            <div style=""font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#333;"">
+                <p>Hi {user.FName} {user.LName},</p>
+                <p>Thank you for registering with <strong>Sanayii</strong>. Please confirm your email by clicking the button below:</p>
+                <p>
+                    <a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" 
+                       style=""background-color:#007bff;color:#fff;padding:10px 20px;text-decoration:none;
+                              font-weight:bold;border-radius:5px;display:inline-block;"">
+                        Confirm Email
+                    </a>
+                </p>
+                <p>If the button doesn’t work, copy and paste this URL into your browser:</p>
+                <p><a href=""{HtmlEncoder.Default.Encode(confirmationLink)}"" style=""color:#007bff;text-decoration:none;"">{HtmlEncoder.Default.Encode(confirmationLink)}</a></p>
+                <p>If you did not sign up for this account, please ignore this email.</p>
+                <p>Best Regards,<br />The Sanayii Team</p>
+            </div>
+        ";
 
             await emailSender.SendEmailAsync(user.Email, subject, messageBody, true);
         }
+
 
         [HttpPost("ResendConfirmationEmail")]
         [AllowAnonymous]
@@ -273,8 +285,8 @@ namespace Sanayii.Controllers
             if (string.IsNullOrEmpty(email))
                 return BadRequest(new { message = "Please provide a valid email address." });
 
-            var user = await userManager.FindByEmailAsync(email);
-
+           
+            var user = await userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
                 return NotFound(new { message = "User not found." });
             var res = await userManager.IsEmailConfirmedAsync(user);
@@ -298,8 +310,9 @@ namespace Sanayii.Controllers
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebUtility.UrlEncode(token);
 
-            var passwordResetLink = Url.Action("ResetPassword", "Account",
-                new { Email = email, Token = encodedToken }, protocol: HttpContext.Request.Scheme);
+            var angularAppUrl = "http://localhost:4200/reset-password";
+            var passwordResetLink = $"{angularAppUrl}?email={WebUtility.UrlEncode(email)}&token={encodedToken}";
+
 
             var safeLink = HtmlEncoder.Default.Encode(passwordResetLink);
 
@@ -339,7 +352,7 @@ namespace Sanayii.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await userManager.FindByEmailAsync(email);
+            var user = await userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user != null)
             {
                 await SendForgotPasswordEmail(user.Email, user);
@@ -355,13 +368,12 @@ namespace Sanayii.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var user = await userManager.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
             if (user == null)
                 return NotFound(new { message = "User not found." });
 
-            var decodedToken = WebUtility.UrlDecode(WebUtility.UrlDecode(model.Token));
 
-            var result = await userManager.ResetPasswordAsync(user, decodedToken, model.Password);
+            var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (result.Succeeded)
             {
                 return Ok(new { message = "Password reset successfully." });
@@ -369,108 +381,49 @@ namespace Sanayii.Controllers
 
             return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
         }
-        [Authorize]
-        [HttpPost("SendPhoneVerificationCode")]
-        public async Task<IActionResult> SendPhoneVerificationCode(ConfirmPhoneNumberDto model)
+        [HttpGet("ConfirmEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
-            if (ModelState.IsValid && !string.IsNullOrEmpty(model.PhoneNumber))
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
             {
-                var user = await userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    return NotFound(new { message = "User not found. Please log in again." });
-                }
-
-                var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-
-                var result = await smsSender.SendSmsAsync(model.PhoneNumber,
-                    $"Your verification code is: {token}. Please enter this code to confirm your phone number.");
-
-                if (result)
-                {
-                    return Ok(new { message = "A verification code has been sent to your phone number. Please enter the code to complete verification." });
-                }
-                else
-                {
-                    return BadRequest(new { message = "We encountered an issue while sending the verification code. Please try again later." });
-                }
+                return BadRequest(new { message = "رابط التأكيد غير صالح." });
             }
-            return BadRequest(new { message = "There were errors in your submission. Please correct them and try again." });
-        }
 
-        [Authorize]
-        [HttpPost("ResendPhoneVerificationCode")]
-        public async Task<IActionResult> ResendPhoneVerificationCode()
-        {
-            var user = await userManager.GetUserAsync(User);
+            var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound(new { message = "User not found. Please log in again." });
+                return NotFound(new { message = "المستخدم غير موجود." });
             }
 
-            if (string.IsNullOrEmpty(user.PhoneNumber))
-            {
-                return BadRequest(new { message = "Your phone number is not set. Please update your phone number to continue." });
-            }
-
-            var token = await userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
             try
             {
-                var result = await smsSender.SendSmsAsync(user.PhoneNumber,
-                    $"Your new verification code is: {token}. Please enter this code to verify your phone number.");
+                // فك تشفير التوكن
+                var decodedTokenBytes = Convert.FromBase64String(WebUtility.UrlDecode(token));
+                var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
 
-                if (result)
+                var result = await userManager.ConfirmEmailAsync(user, decodedToken);
+                if (result.Succeeded)
                 {
-                    return Ok(new { message = "A new verification code has been sent to your phone. Please enter the code below to confirm your phone number." });
+                    // إرجاع رسالة النجاح مع رابط لتوجيه المستخدم إلى صفحة تسجيل الدخول
+                    return Ok(new
+                    {
+                        message = "تم تأكيد البريد الإلكتروني بنجاح ✅",
+                        redirectToLogin = true // إضافة خاصية لتوجيه المستخدم إلى صفحة تسجيل الدخول
+                    });
                 }
                 else
                 {
-                    return BadRequest(new { message = "We were unable to resend the verification code. Please try again later." });
+                    return BadRequest(new { message = "فشل في تأكيد البريد الإلكتروني." });
                 }
             }
-            catch (Exception ex)
+            catch (FormatException)
             {
-                return BadRequest(new { message = "An error occurred while sending the verification code. Please try again later." });
+                return BadRequest(new { message = "رمز التأكيد غير صالح." });
             }
         }
 
-        [Authorize]
-        [HttpPost("VerifyPhoneNumber")]
-        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberDto model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new { message = "Invalid data submitted.", errors = ModelState });
-            }
-
-            var user = await userManager.GetUserAsync(User);
-            if (user == null || string.IsNullOrEmpty(user.PhoneNumber))
-            {
-                return NotFound(new { message = "User not found. Please log in again." });
-            }
-
-            var isTokenValid = await userManager.VerifyChangePhoneNumberTokenAsync(user, model.Token, user.PhoneNumber);
-
-            if (isTokenValid)
-            {
-                user.PhoneNumberConfirmed = true;
-                var updateResult = await userManager.UpdateAsync(user);
-
-                if (updateResult.Succeeded)
-                {
-                    return Ok(new { message = "Your phone number has been successfully verified." });
-                }
-                else
-                {
-                    return BadRequest(new { message = "An error occurred while confirming your phone number. Please try again." });
-                }
-            }
-            else
-            {
-                return BadRequest(new { message = "The token has expired or is invalid. Please request a new verification code." });
-            }
-        }
-
+       
         private async Task SendPasswordChangedNotificationEmail(string email, AppUser user, string device)
         {
             var subject = "Your Password Has Been Changed";
