@@ -55,7 +55,7 @@ namespace Sanayii
                 options.Lockout.AllowedForNewUsers = true;
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
             })
             .AddEntityFrameworkStores<SanayiiContext>()
             .AddDefaultTokenProviders();
@@ -88,7 +88,9 @@ namespace Sanayii
                 options.AddPolicy("AllowSpecificOrigin",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:4200") // URL Angular app
+
+                         policy.WithOrigins(  "http://localhost:4200",   "https://localhost:4200"    )                    
+
                               .AllowAnyHeader()
                               .AllowAnyMethod()
                               .AllowCredentials(); // Allow cookies, headers, etc.
