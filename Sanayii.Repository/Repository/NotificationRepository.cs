@@ -34,6 +34,12 @@ namespace Sanayii.Repository.Repository
             }
 
         }
+        public void MarkNotification(int id)
+        {
+            var notification = db.Notifications.Find(id);
+            notification.IsRead = true;
+            db.Entry(notification).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        }
         public void DeleteCustomerNotification(string customerid)
         {
             var notifications = db.Notifications
