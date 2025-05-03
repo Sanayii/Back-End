@@ -43,5 +43,39 @@ namespace Sanayii.Repository
         {
             _dbContext.ServiceRequestPayments.Remove(entity);
         }
+
+        public void cancelRequest(string? customerId, string artisanId, int serviceId, int paymentId)
+        {
+            // Find the payment record
+            var serviceRequestPayment = _dbContext.ServiceRequestPayments
+                .FirstOrDefault(p => p.CustomerId == customerId &&
+                                     p.ArtisanId == artisanId &&
+                                     p.ServiceId == serviceId);
+
+           
+            var service = _dbContext.Service
+                .FirstOrDefault(s => s.Id == serviceId);
+
+            var payment = _dbContext.Payments.FirstOrDefault(p => p.Id == paymentId);
+
+            if (payment != null) {
+
+                _dbContext.Payments.Remove(payment);
+            }
+
+            
+            if (serviceRequestPayment != null)
+            {
+                _dbContext.ServiceRequestPayments.Remove(serviceRequestPayment);
+            }
+
+            if (service != null)
+            {
+                _dbContext.Service.Remove(service);
+            }
+
+            _dbContext.SaveChanges();
+        }
+
     }
 }

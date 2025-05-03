@@ -76,15 +76,21 @@ namespace Sanayii.Core.Repository
             db.ServiceRequestPayments.Update(entity);
         }
 
+
         public void Delete(ServiceRequestPayment entity)
         {
             db.ServiceRequestPayments.Remove(entity);
         }
+
         public async Task<List<ServiceRequestPayment>> GetByCustomerAndStatusAsync(string customerId, ServiceStatus status)
         {
             return await db.ServiceRequestPayments
                 .Where(x => x.CustomerId == customerId && x.Status == status)
                 .ToListAsync();
         }
+
+
+
+     
     }
 }

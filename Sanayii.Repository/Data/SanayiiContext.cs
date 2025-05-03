@@ -48,6 +48,8 @@ namespace Sanayii.Repository.Data
         public DbSet<Review> Review { get; set; }
         public DbSet<UserPhones> UserPhones { get; set; }
 
+        public DbSet<Service> Service { get; set; }
+
         public virtual DbSet<ServiceRequestPayment> ServiceRequestPayments { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
     }

@@ -85,7 +85,10 @@ namespace Sanayii.APIs.Controllers
                 PaymentMethod = s.Payment != null ? (int)s.Payment.Method : 0,       // default 0 = Unknown
                 PaymentAmount = s.Payment?.Amount ?? 0,
                 ServiceName = s.Service?.ServiceName ?? "Unknown",
-                ArtisanName = s.Artisan != null ? $"{s.Artisan.FName} {s.Artisan.LName}" : "Not assigned"
+                ArtisanName = s.Artisan != null ? $"{s.Artisan.FName} {s.Artisan.LName}" : "Not assigned",
+
+                artisanId = s.ArtisanId,
+                ServiceId = s.ServiceId
             }).ToList();
 
             return Ok(allServicesDtos);

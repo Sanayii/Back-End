@@ -14,9 +14,9 @@ namespace Sanayii.APIs.Controllers
             _unitOfWork = unitOFWork;
         }
         [HttpGet("{id}")]
-        public IActionResult GetCustomerDiscounts(string customerid)
+        public IActionResult GetCustomerDiscounts(string id)
         {
-            var res = _unitOfWork._DiscountRepo.GetCustomerDiscounts(customerid);
+            var res = _unitOfWork._DiscountRepo.GetCustomerDiscounts(id);
             if (res == null)
             {
                 return NotFound();

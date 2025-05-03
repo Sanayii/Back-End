@@ -28,6 +28,8 @@ namespace Sanayii.Repository.Repository
         ServiceRequestPaymentRepository serviceRequestPaymentRepo;
         ServiceRequestPaymentRepo serviceRequestPaymentRepos;
 
+ 
+
         CustomerRepository CustomerRepo;
         ArtisanRepository ArtisanRepo;
 
@@ -46,6 +48,7 @@ namespace Sanayii.Repository.Repository
         {
             this.db = db;
         }
+
 
        
 

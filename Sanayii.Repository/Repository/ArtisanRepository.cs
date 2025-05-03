@@ -17,9 +17,11 @@ namespace Sanayii.Core.Repository
         {
             return db.Artisans.Where(Artisan => Artisan.IsDeleted == false).ToList();
         }
+
         public Artisan GetArtisanById(string id)
         {
             return db.Artisans.FirstOrDefault(Artisan => Artisan.Id == id && Artisan.IsDeleted == false);
         }
+
     }
 }
