@@ -17,6 +17,9 @@ namespace Sanayii.Core.DTOs.CustomerDTOs
         public string ServiceName { get; set; }
         public string ArtisanName { get; set; }
 
+        public int ServiceId { get; set; }
+        public string artisanId { get; set; }
+
         
 
     }

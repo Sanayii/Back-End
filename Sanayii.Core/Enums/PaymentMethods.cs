@@ -2,9 +2,9 @@
 {
     public enum PaymentMethods
     {
-        Cash = 0,
-        CreditCard = 1,
-        PayPal = 2,
-        BankTransfer = 3
+        Cash = 1,
+        CreditCard = 2,
+        PayPal = 3,
+        BankTransfer = 4
     }
 }

@@ -134,6 +134,14 @@ namespace Sanayii.APIs.Controllers
 
             // Return the artisan with the highest rating
             return availableArtisans.OrderByDescending(a => a.Rating).FirstOrDefault();
+
+        }
+
+        [HttpDelete]
+        public IActionResult cancel(string? CustomerId, string artisanId, int serviceId, int paymentId)
+        {
+            _unitOfWork._ServiceRequestPaymentRepo.cancelRequest(CustomerId, artisanId, serviceId, paymentId);
+            return Ok();
         }
     }
 
