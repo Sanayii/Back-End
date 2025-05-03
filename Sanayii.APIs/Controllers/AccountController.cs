@@ -191,7 +191,8 @@ namespace Sanayii.Controllers
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return BadRequest("External login information is unavailable.");
+                var errorUrl = "http://localhost:4200/login?error=EmailMismatch";
+                return Redirect(errorUrl);
             }
 
             var user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
@@ -203,7 +204,8 @@ namespace Sanayii.Controllers
 
                 if (user == null)
                 {
-                    return BadRequest("Email not registered.");
+                    var errorUrl = "http://localhost:4200/login?error=EmailMismatch";
+                    return Redirect(errorUrl);
                 }
             }
             else
@@ -211,7 +213,8 @@ namespace Sanayii.Controllers
                 var emailFromJwt = info.Principal.FindFirstValue(ClaimTypes.Email);
                 if (user.Email != emailFromJwt)
                 {
-                    return BadRequest("Email mismatch between database and JWT.");
+                    var errorUrl = "http://localhost:4200/login?error=EmailMismatch";
+                    return Redirect(errorUrl);
                 }
             }
 

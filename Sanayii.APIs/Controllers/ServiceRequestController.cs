@@ -107,8 +107,8 @@ namespace Sanayii.APIs.Controllers
         {
             // Retrieve available artisans based on category and government
 
-            var artisans = db.Artisans.Where(x=> x.CategoryId == categoryId && x.Government == governmentCustomer).ToList();
-            //var artisans = db.Artisans.ToList();
+            //var artisans = db.Artisans.Where(x=> x.CategoryId == categoryId && x.Government == governmentCustomer).ToList();
+            var artisans = db.Artisans.ToList();
             // If no artisans are found, return null
             if (!artisans.Any())
             {
