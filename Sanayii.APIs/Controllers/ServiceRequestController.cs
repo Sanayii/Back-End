@@ -117,7 +117,7 @@ namespace Sanayii.APIs.Controllers
 
             // Retrieve artisan ids who are assigned to a pending or in-progress service request
             var busyArtisanIds = db.ServiceRequestPayments
-                .Where(s => s.ArtisanId != null && (s.Status == ServiceStatus.Pending || s.Status == ServiceStatus.InProgress))
+                .Where(s => s.ArtisanId != null && (s.Status == ServiceStatus.Service_Requested || s.Status== ServiceStatus.Awaiting_Approval  || s.Status == ServiceStatus.Artisan_Busy|| s.Status == ServiceStatus.In_Progress))
                 .Select(s => s.ArtisanId ?? string.Empty)
                 .Where(id => !string.IsNullOrEmpty(id))
                 .Distinct()
